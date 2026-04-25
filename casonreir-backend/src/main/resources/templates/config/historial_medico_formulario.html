@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Gestión - Historial Médico')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-gradient-to-br from-rose-600 to-pink-700 text-white text-center shadow-xl">
+        <h1 class="text-5xl font-black mb-2 tracking-tighter uppercase italic">Ficha <span class="text-rose-200">Médica</span></h1>
+        <p class="opacity-80 text-sm tracking-widest uppercase">Registro de consultas y tratamientos de becados</p>
+    </div>
+    <!-- AGREGADO enctype="multipart/form-data" para subir archivos -->
+    <form th:action="@{/config/historial-medico/guardar}" th:object="${historial}" method="post" enctype="multipart/form-data"
+          class="bg-white rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.1)] p-12 border border-slate-100">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Becado -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Becado</label>
+                <select th:field="*{becado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700" required>
+                    <option value="">-- Seleccionar --</option>
+                    <option th:each="b : ${becados}" th:value="${b.id}"
+                            th:text="${b.informacionPersonal.nombre + ' ' + b.informacionPersonal.apellidoPat}"></option>
+                </select>
+            </div>
+
+            <!-- Médico -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Médico / Especialista</label>
+                <select th:field="*{medico}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700" required>
+                    <option value="">-- Seleccionar --</option>
+                    <option th:each="m : ${medicos}" th:value="${m.id}"
+                            th:text="${m.informacionPersonal.nombre + ' ' + m.informacionPersonal.apellidoPat}"></option>
+                </select>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fecha de Consulta</label>
+                <input type="date" th:field="*{fecha}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700" required>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Costo (Bs)</label>
+                <input type="number" step="0.01" th:field="*{costo}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700">
+            </div>
+
+            <div class="space-y-2 md:col-span-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Diagnóstico y Detalle</label>
+                <textarea th:field="*{detalle}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-medium text-slate-700" rows="4" placeholder="Detalle del diagnóstico, tratamiento, etc."></textarea>
+            </div>
+
+            <div class="space-y-2 md:col-span-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Adjuntar Documento (Receta, Informe, etc.)</label>
+                <div class="bg-rose-50 border-2 border-dashed border-rose-200 rounded-3xl p-8 text-center group hover:bg-rose-100 transition-all">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-rose-300 group-hover:scale-110 transition-transform mb-4"></i>
+                    <input type="file" name="fileDocumento" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-rose-600 file:text-white hover:file:bg-rose-700 cursor-pointer">
+                    <p class="text-[9px] text-slate-400 mt-4 uppercase font-bold">Máximo 5MB • Formato PDF / JPG / PNG</p>
+                </div>
+                <!-- Mostramos nombre actual si existe -->
+                <p th:if="*{documento}" class="text-[10px] text-emerald-600 font-bold mt-2 italic">
+                    <i class="fas fa-check-circle"></i> Archivo actual: <span th:text="*{documento}"></span>
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-12 pt-10 border-t border-slate-100 flex justify-between items-center">
+            <a href="/config/historial-medico" class="text-xs font-black text-slate-400 hover:text-slate-600 transition uppercase tracking-widest">Cancelar</a>
+            <button type="submit" class="bg-gradient-to-r from-rose-600 to-pink-600 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 active:scale-95 transition-all">
+                GUARDAR REGISTRO <i class="fas fa-save ml-2"></i>
+            </button>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

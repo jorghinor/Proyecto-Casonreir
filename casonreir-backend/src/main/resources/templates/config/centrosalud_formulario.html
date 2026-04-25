@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Formulario Centro de Salud')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-gradient-to-br from-purple-600 to-indigo-800 text-white text-center shadow-xl">
+        <h1 class="text-5xl font-black mb-2 uppercase italic">Centro de Salud</h1>
+    </div>
+    <form th:action="@{/config/centrosalud/guardar}" th:object="${centroSalud}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border">
+        <input type="hidden" th:field="*{id}" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-2 md:col-span-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Nombre del Centro</label>
+                <input type="text" th:field="*{nombre}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Tipo</label>
+                <select th:field="*{tipoCentroSalud}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+                    <option th:each="t : ${tipos}" th:value="${t.id}" th:text="${t.nombre}"></option>
+                </select>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Teléfono</label>
+                <input type="text" th:field="*{telefono}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+            </div>
+            <div class="space-y-2 md:col-span-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Dirección</label>
+                <input type="text" th:field="*{direccion}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+            </div>
+            <div class="space-y-2 md:col-span-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Observaciones</label>
+                <textarea th:field="*{observacion}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl" rows="3"></textarea>
+            </div>
+            <!-- Campos Fantasmas -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Referencia 1</label>
+                <input type="text" th:field="*{name1}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Referencia 2</label>
+                <input type="text" th:field="*{name2}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+            </div>
+        </div>
+        <div class="mt-12 pt-10 border-t flex justify-between">
+            <a href="/config/centrosalud" class="text-xs font-black text-slate-400 uppercase">Volver</a>
+            <button type="submit" class="bg-purple-600 text-white px-12 py-5 rounded-3xl font-black shadow-xl uppercase">Guardar Centro</button>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

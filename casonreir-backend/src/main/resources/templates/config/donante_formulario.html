@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Gestión - Donante Externo')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+        <div class="pt-23 pb-12 bg-gradient-to-br from-emerald-600 to-teal-800 text-white text-center shadow-xl">
+            <h1 class="text-5xl font-black mb-2 tracking-tighter uppercase italic">Ficha de <span class="text-emerald-200">Donante</span></h1>
+            <p class="opacity-80 text-sm tracking-widest uppercase">Registro de benefactores y colaboradores externos</p>
+        </div>
+        <form th:action="@{/config/donantes/guardar}" th:object="${donante}" method="post"
+              class="bg-white rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.1)] p-12 border border-slate-100">
+
+            <!-- CAMPOS OCULTOS -->
+            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:if="*{informacionPersonal != null}" th:field="*{informacionPersonal.id}" />
+
+            <div class="flex items-center space-x-4 mb-10 border-b border-slate-50 pb-6">
+                <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-inner">
+                    <i class="fas fa-hand-holding-heart text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tighter">Información Personal</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" th:if="*{informacionPersonal != null}">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombres</label>
+                    <input type="text" th:field="*{informacionPersonal.nombre}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-emerald-100 outline-none text-slate-700 font-bold" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Apellido Paterno</label>
+                    <input type="text" th:field="*{informacionPersonal.apellidoPat}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-emerald-100 outline-none text-slate-700 font-bold" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Apellido Materno</label>
+                    <input type="text" th:field="*{informacionPersonal.apellidoMat}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none text-slate-700 font-bold">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Documento de Identidad (CI)</label>
+                    <input type="text" th:field="*{informacionPersonal.ci}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none text-slate-700 font-bold">
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4 mt-12 mb-10 border-b border-slate-50 pb-6">
+                <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 shadow-inner">
+                    <i class="fas fa-gift text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tighter">Detalles de Colaboración</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Especialidad de Donación</label>
+                    <input type="text" th:field="*{tipoDonacion}" placeholder="Ej. Medicamentos, Juguetes, Efectivo" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-blue-100 outline-none text-slate-700 font-bold">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Estado</label>
+                    <select th:field="*{estado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-blue-100 outline-none font-bold text-slate-700">
+                        <option value="ACTIVO">ACTIVO</option>
+                        <option value="INACTIVO">INACTIVO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-10 border-t flex justify-between items-center">
+                <a href="/config/donantes" class="text-xs font-black text-slate-400 hover:text-slate-600 transition uppercase tracking-widest">Cancelar</a>
+                <button type="submit" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 active:scale-95 transition-all">
+                    GUARDAR DONANTE <i class="fas fa-save ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

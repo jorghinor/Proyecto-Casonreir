@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Gestión de Nota Interna')}"></head>
+<body class="bg-slate-50 font-sans">
+
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-gradient-to-br from-teal-600 to-emerald-700 text-white text-center shadow-xl">
+        <h1 class="text-5xl font-black mb-2 uppercase italic">Nota de <span class="text-teal-200">Seguimiento</span></h1>
+        <p class="opacity-80 text-sm tracking-widest uppercase">Bitácora de incidencias y observaciones</p>
+    </div>
+    <form th:action="@{/config/memos/guardar}" th:object="${memo}" method="post"
+          class="bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="space-y-8">
+
+            <!-- SELECCIONAR PERSONA -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Vincular a Persona (Becado, Personal, Padrino)</label>
+                <select th:field="*{persona}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold focus:ring-4 focus:ring-teal-100 transition-all" required>
+                    <option th:each="p : ${personas}"
+                            th:value="${p.id}"
+                            th:text="${p.nombre + ' ' + p.apellidoPat + ' (CI: ' + p.ci + ')'}"></option>
+                </select>
+            </div>
+
+            <!-- TÍTULO Y NIVEL -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-2 space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Título / Asunto Corto</label>
+                    <input type="text" th:field="*{titulo}"
+                           class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold focus:ring-4 focus:ring-teal-100 transition-all"
+                           placeholder="Ej: Reporte de conducta" required>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Prioridad</label>
+                    <select th:field="*{nivel}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold focus:ring-4 focus:ring-teal-100 transition-all">
+                        <option value="1">🟢 BAJA</option>
+                        <option value="2">🟡 MEDIA</option>
+                        <option value="3">🔴 ALTA / URGENTE</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Detalle de la Observación</label>
+                <textarea th:field="*{contenido}"
+                          class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-medium focus:ring-4 focus:ring-teal-100 transition-all"
+                          rows="6" placeholder="Escribe aquí los detalles de la situación..." required></textarea>
+            </div>
+
+        </div>
+
+        <div class="mt-12 pt-10 border-t border-slate-100 flex justify-between items-center">
+            <a href="/config/memos" class="text-xs font-black text-slate-400 hover:text-teal-600 transition uppercase tracking-widest">Cancelar</a>
+            <button type="submit" class="bg-gradient-to-r from-teal-600 to-emerald-700 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 active:scale-95 transition-all uppercase tracking-widest">
+                Guardar Nota <i class="fas fa-save ml-2"></i>
+            </button>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Gestión - Reglamento')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <!-- Script de CKEditor 5 -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-6xl mx-auto px-4 py-16 -mt-10">
+        <div class="pt-23 pb-12 bg-gradient-to-br from-indigo-700 to-slate-900 text-white text-center shadow-xl">
+            <h1 class="text-5xl font-black mb-2 tracking-tighter uppercase italic">Editor de <span class="text-indigo-200">Reglamento</span></h1>
+            <p class="opacity-60 text-sm tracking-widest uppercase">Formato profesional para documentos institucionales</p>
+        </div>
+        <form th:action="@{/config/reglamentos/guardar}" th:object="${reglamento}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border">
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="grid grid-cols-1 gap-10">
+                <!-- Selector de Sede -->
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sede / C.E.A. Responsable</label>
+                    <select th:field="*{centroApoyo}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700 focus:ring-4 focus:ring-indigo-100">
+                        <option value="">-- Reglamento General de la Fundación --</option>
+                        <option th:each="c : ${centros}" th:value="${c.id}" th:text="${c.nombre}"></option>
+                    </select>
+                </div>
+
+                <!-- Editor de Contenido -->
+                <div class="space-y-4">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Contenido del Documento</label>
+                    <div class="prose max-w-none">
+                        <textarea id="editor" th:field="*{contenido}" class="hidden"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-10 border-t flex justify-between items-center">
+                <a href="/config/reglamentos" class="text-xs font-black text-slate-400 hover:text-slate-600 transition uppercase tracking-widest">Descartar Cambios</a>
+                <button type="submit" class="bg-gradient-to-r from-indigo-600 to-indigo-900 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center">
+                    PUBLICAR REGLAMENTO <i class="fas fa-check-circle ml-3 text-xl"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <style>
+        /* Personalización del Editor para que encaje con el diseño Premium */
+        .ck-editor__encoded { border-radius: 2rem !important; overflow: hidden; }
+        .ck-content { min-height: 500px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; color: #334155; padding: 2rem !important; }
+        .ck.ck-editor__main>.ck-editor__editable { border-radius: 0 0 2rem 2rem !important; border-color: #f1f5f9 !important; }
+        .ck.ck-toolbar { background: #f8fafc !important; border-radius: 2rem 2rem 0 0 !important; border-color: #f1f5f9 !important; padding: 0.5rem 1rem !important; }
+    </style>
+
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#editor' ), {
+                toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo' ],
+                placeholder: 'Escriba aquí los términos del reglamento...'
+            } )
+            .then( editor => {
+                console.log( 'Editor listo para el reglamento' );
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

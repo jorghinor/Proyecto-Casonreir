@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Gestión - Historial Académico')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+        <div class="pt-23 pb-12 bg-indigo-600 text-white text-center shadow-xl">
+            <h1 class="text-5xl font-black mb-2 tracking-tighter uppercase italic">Registro de <span class="text-indigo-200">Notas</span></h1>
+        </div>
+        <!-- AGREGADO enctype para subir archivos -->
+        <form th:action="@{/config/historial-academico/guardar}" th:object="${historialAcademico}" method="post" enctype="multipart/form-data"
+              class="bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100">
+
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-2 md:col-span-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Becado</label>
+                    <select th:field="*{becado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700" required>
+                        <option th:each="b : ${becados}" th:value="${b.id}" th:text="${b.informacionPersonal.nombre + ' ' + b.informacionPersonal.apellidoPat}"></option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fecha</label>
+                    <input type="date" th:field="*{fecha}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold" required>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Rendimiento</label>
+                    <select th:field="*{rendimiento}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold">
+                        <option value="EXCELENTE">Excelente</option>
+                        <option value="MUY BUENO">Muy Bueno</option>
+                        <option value="BUENO">Bueno</option>
+                        <option value="REGULAR">Regular</option>
+                        <option value="REPROBADO">Apoyo Necesario</option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Promedio Libreta (0-100)</label>
+                    <input type="number" th:field="*{promedioLibreta}" step="0.01" min="0" max="100"
+                           class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold"
+                           placeholder="Ej. 87.50">
+                </div>
+
+                <div class="space-y-2 md:col-span-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Cargar Libreta (PDF)</label>
+                    <div class="bg-indigo-50 border-2 border-dashed border-indigo-200 rounded-3xl p-8 text-center">
+                        <input type="file" name="fileLibreta" class="w-full text-xs font-black">
+                        <p class="text-[9px] text-slate-400 mt-2">Formatos aceptados: PDF, JPG, PNG</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2 md:col-span-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Observaciones</label>
+                    <textarea th:field="*{observacion}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-medium" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-10 border-t flex justify-between">
+                <a href="/config/historial-academico" class="text-xs font-black text-slate-400 uppercase">Cancelar</a>
+                <button type="submit" class="bg-indigo-600 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 transition-all">GUARDAR HISTORIAL</button>
+            </div>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

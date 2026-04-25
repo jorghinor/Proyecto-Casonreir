@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Sedes C.E.A.')}"></head>
+<style>
+    .text-truncate-multiline {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.75rem;
+        line-height: 1.1rem;
+        color: #475569;
+    }
+    .table-fixed-layout { table-layout: fixed; width: 100%; }
+</style>
+<body class="bg-slate-50 font-sans">
+
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-[1600px] mx-auto px-6 pt-32 pb-20">
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-black text-slate-800 uppercase italic text-blue-600">Sedes C.E.A.</h1>
+            <p class="text-slate-400 font-bold text-xs uppercase">Gestión de Centros de Apoyo</p>
+        </div>
+        <a th:href="@{/config/centroapoyo/nuevo}" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-black shadow-lg uppercase text-xs hover:bg-blue-700 transition-all">
+            + Nueva Sede
+        </a>
+    </div>
+
+    <!-- BUSCADOR -->
+    <div class="bg-white p-4 rounded-3xl shadow-lg border border-slate-100 mb-8">
+        <form th:action="@{/config/centroapoyo}" method="get" class="flex gap-4">
+            <input type="text" name="buscar" th:value="${buscar}" placeholder="Buscar por nombre o dirección..."
+                   class="flex-1 px-6 py-3 bg-slate-50 border-0 rounded-2xl font-bold outline-none">
+            <button type="submit" class="bg-slate-900 text-white px-8 rounded-2xl font-black text-xs uppercase hover:bg-blue-600 transition-all">Buscar</button>
+        </form>
+    </div>
+
+    <!-- TABLA -->
+    <div class="bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100">
+        <table class="table-fixed-layout">
+            <thead class="bg-slate-100 border-b border-slate-200 text-[10px] font-black text-slate-500 uppercase">
+            <tr>
+                <th class="px-6 py-4 w-1/6">Centro</th>
+                <th class="px-4 py-4 w-1/5">Misión</th>
+                <th class="px-4 py-4 w-1/5">Visión</th>
+                <th class="px-4 py-4 w-1/5">Objetivo</th>
+                <th class="px-4 py-4 w-1/5">Historia</th>
+                <th class="px-6 py-4 w-32 text-right">Acciones</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+            <tr th:each="c : ${centrosApoyo}" class="group hover:bg-blue-50/20 transition-all italic">
+                <td class="px-6 py-4 align-top">
+                    <p class="font-black text-slate-800 text-base mb-1" th:text="${c.nombre}"></p>
+                    <p class="text-xs text-slate-500 mb-1"><i class="fas fa-map-marker-alt mr-1"></i> <span th:text="${c.direccion}"></span></p>
+                    <p class="text-xs font-bold text-blue-600"><i class="fas fa-phone mr-1"></i> <span th:text="${c.telefono}"></span></p>
+                </td>
+                <td class="px-4 py-4 align-top">
+                    <div class="text-truncate-multiline" th:utext="${c.mision}"></div>
+                </td>
+                <td class="px-4 py-4 align-top">
+                    <div class="text-truncate-multiline" th:utext="${c.vision}"></div>
+                </td>
+                <td class="px-4 py-4 align-top">
+                    <div class="text-truncate-multiline" th:utext="${c.objetivo}"></div>
+                </td>
+                <td class="px-4 py-4 align-top">
+                    <div class="text-truncate-multiline" th:utext="${c.historia}"></div>
+                </td>
+                <td class="px-6 py-4 align-top text-right space-y-1">
+                    <a th:href="@{'/config/centroapoyo/editar/' + ${c.id}}" class="block text-blue-600 font-black text-[9px] uppercase hover:underline">Editar</a>
+                    <a th:href="@{'/config/centroapoyo/eliminar/' + ${c.id}}" class="block text-rose-600 font-black text-[9px] uppercase hover:underline">Borrar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- PAGINACIÓN -->
+        <div class="bg-slate-50 px-8 py-4 flex justify-between items-center border-t border-slate-200">
+            <p class="text-[10px] font-black text-slate-400 uppercase">
+                Página <span class="text-slate-800" th:text="${currentPage + 1}">1</span> de <span th:text="${totalPages}">1</span>
+            </p>
+            <div class="flex space-x-2">
+                <a th:if="${currentPage > 0}" th:href="@{/config/centroapoyo(page=${currentPage - 1}, buscar=${buscar})}"
+                   class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase hover:bg-blue-600 hover:text-white transition-all">Anterior</a>
+                <a th:if="${currentPage + 1 < totalPages}" th:href="@{/config/centroapoyo(page=${currentPage + 1}, buscar=${buscar})}"
+                   class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase hover:bg-blue-600 hover:text-white transition-all">Siguiente</a>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>
+

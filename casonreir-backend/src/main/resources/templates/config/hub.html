@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Centro de Control - Casonreir')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-[1400px] mx-auto px-6 pt-32 pb-20">
+    <div class="mb-16 text-center">
+        <h1 class="text-5xl font-black text-slate-800 tracking-tighter uppercase italic">Centro de <span class="text-blue-600">Control</span></h1>
+        <p class="text-slate-400 font-bold tracking-[0.3em] uppercase mt-2">Configuración avanzada y soporte del sistema</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <!-- ÁREA MÉDICA (Visible para ADMIN y MEDICO) -->
+        <div class="space-y-6" sec:authorize="hasAnyRole('ADMIN', 'MEDICO')">
+            <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest ml-4">Salud</h3>
+            <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-100 p-8 space-y-4">
+                <a href="/config/medicos" class="flex items-center space-x-4 p-4 hover:bg-cyan-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center text-cyan-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-user-md text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Médicos</p></div>
+                </a>
+                <a href="/config/historial-medico" class="flex items-center space-x-4 p-4 hover:bg-rose-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center text-rose-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-notes-medical text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Historial Medico</p></div>
+                </a>
+                <a href="/config/tipos-especialidad" class="flex items-center space-x-4 p-4 hover:bg-emerald-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-stethoscope"></i></div>
+                    <div><p class="font-black text-slate-800 text-sm">Especialidades</p></div>
+                </a>
+                <a href="/config/centrosalud" class="flex items-center space-x-4 p-4 hover:bg-purple-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-hospital"></i></div>
+                    <div><p class="font-black text-slate-800 text-sm">Centros de Salud</p></div>
+                </a>
+                <a href="/config/tipos-centrosalud" class="flex items-center space-x-4 p-4 hover:bg-purple-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-hospital-alt"></i></div>
+                    <div><p class="font-black text-slate-800 text-sm">Tipos de Centro</p></div>
+                </a>
+            </div>
+        </div>
+
+        <!-- ÁREA PERSONAL / SEDES (Visible para ADMIN y ENCARGADO) -->
+        <div class="space-y-6" sec:authorize="hasAnyRole('ADMIN', 'ENCARGADO')">
+            <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest ml-4">Gestión</h3>
+            <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-100 p-8 space-y-4">
+                <a href="/config/centrosapoyo" class="flex items-center space-x-4 p-4 hover:bg-blue-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-building text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Sedes CEA</p></div>
+                </a>
+                <a href="/config/encargados" class="flex items-center space-x-4 p-4 hover:bg-amber-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-user-tie text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Encargados</p></div>
+                </a>
+                <a href="/config/instituciones" class="flex items-center space-x-4 p-4 hover:bg-slate-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-university text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Instituciones</p></div>
+                </a>
+                <!-- ENLACE DONANTE EXTERNO -->
+                <a href="/config/donantes" class="flex items-center space-x-4 p-4 hover:bg-emerald-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-hand-holding-heart text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Donantes Ext.</p></div>
+                </a>
+                <a href="/config/encargados-centros" class="flex items-center space-x-4 p-4 hover:bg-blue-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <p class="font-black text-slate-800 text-sm">Encargados x Sede</p>
+                </a>
+                <a href="/config/reportes" class="flex items-center space-x-4 p-4 hover:bg-teal-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-teal-600 shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <p class="font-black text-slate-800 text-sm">Reportes</p>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase">Generador de Informes</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- ÁREA COMUNICACIÓN (Visible para ADMIN, ENCARGADO y AUXILIAR) -->
+        <div class="space-y-6" sec:authorize="hasAnyRole('ADMIN', 'ENCARGADO', 'AUXILIAR')">
+            <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest ml-4">Contenido</h3>
+            <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-100 p-8 space-y-4">
+                <!-- HISTORIAL ACADÉMICO -->
+                <a href="/config/historial-academico" class="flex items-center space-x-4 p-4 hover:bg-blue-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fas fa-graduation-cap text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-black text-slate-800">Historial Académico</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Notas y Progreso</p>
+                    </div>
+                </a>
+                <a href="/config/noticias" class="flex items-center space-x-4 p-4 hover:bg-indigo-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-newspaper text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Noticias</p></div>
+                </a>
+                <a href="/config/reglamentos" class="flex items-center space-x-4 p-4 hover:bg-slate-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-slate-200 rounded-xl flex items-center justify-center text-slate-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-file-contract text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Reglamentos</p></div>
+                </a>
+                <!-- ENLACE PADRINO-BECADO (Asignaciones) -->
+                <a href="/config/padrino-becado" class="flex items-center space-x-4 p-4 hover:bg-blue-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <div>
+                        <p class="font-black text-slate-800 text-sm">Vínculos P-B</p>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase">Asignaciones</p>
+                    </div>
+                </a>
+                <a href="/donaciones-becados" class="flex items-center space-x-4 p-4 hover:bg-emerald-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <p class="font-black text-slate-800 text-sm">Donaciones x Becado</p>
+                </a>
+                <a href="/config/actividades-becados" class="flex items-center space-x-4 p-4 hover:bg-blue-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-skating"></i></div>
+                    <div><p class="font-black text-slate-800 text-sm">Actividades x Becado</p></div>
+                </a>
+                <a href="/config/memos" class="flex items-center space-x-4 p-4 hover:bg-teal-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-teal-600 shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <p class="font-black text-slate-800 text-sm">Notas Internas</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- ÁREA SISTEMA (SOLO PARA ADMIN) -->
+        <div class="space-y-6" sec:authorize="hasRole('ADMIN')">
+            <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest ml-4">Sistema</h3>
+            <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-100 p-8 space-y-4">
+                <a href="/config/usuarios" class="flex items-center space-x-4 p-4 hover:bg-rose-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center text-rose-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-users-cog text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Cuentas Acceso</p></div>
+                </a>
+                <!-- DIRECTORIO PERSONAS (AÑADIDO) -->
+                <a href="/config/personas" class="flex items-center space-x-4 p-4 hover:bg-slate-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-id-card text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Directorio Personas</p><p class="text-[10px] text-slate-400 font-bold uppercase">Maestro de Datos</p></div>
+                </a>
+                <a href="/config/tipos-actividad" class="flex items-center space-x-4 p-4 hover:bg-slate-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-500 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-tags text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Tipos Act.</p></div>
+                </a>
+                <a href="/config/tipos-donacion" class="flex items-center space-x-4 p-4 hover:bg-slate-50 rounded-2xl transition-all group">
+                    <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-500 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-gift text-xl"></i></div>
+                    <div><p class="font-black text-slate-800">Tipos Donación</p></div>
+                </a>
+                <!-- GRUPOS DE SEGURIDAD -->
+                <a href="/config/grupos" class="flex items-center space-x-4 p-4 hover:bg-slate-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <p class="font-black text-slate-800 text-sm">Grupos / Roles</p>
+                </a>
+                <a href="/config/permisos" class="flex items-center space-x-4 p-4 hover:bg-orange-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 shadow-inner group-hover:scale-110 transition-transform"><i class="fas fa-key"></i></div>
+                    <div><p class="font-black text-slate-800 text-sm">Permisos</p></div>
+                </a>
+                <!-- ASIGNACIÓN DE ROLES (Usuarios y Grupos) -->
+                <a href="/config/usuarios-grupos" class="flex items-center space-x-4 p-4 hover:bg-orange-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-tag"></i>
+                    </div>
+                    <div>
+                        <p class="font-black text-slate-800 text-sm">Asignar Roles</p>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase">Vincular Usuarios a Grupos</p>
+                    </div>
+                </a>
+                <a href="/config/grupos-permisos" class="flex items-center space-x-4 p-4 hover:bg-orange-50 rounded-2xl transition-all group">
+                    <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-lock"></i>
+                    </div>
+                    <p class="font-black text-slate-800 text-sm">Permisos de Grupo</p>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

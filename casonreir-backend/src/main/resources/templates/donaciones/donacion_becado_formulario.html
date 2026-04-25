@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Asignar Donación')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-indigo-700 text-white text-center shadow-xl">
+        <h1 class="text-5xl font-black mb-2 uppercase italic">Asignar / Editar Donación</h1>
+    </div>
+    <form th:action="@{/donaciones-becados/guardar}" th:object="${donacionBecado}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border">
+        <!-- Si es una edición, necesitamos los IDs para que no cree un registro nuevo -->
+        <input type="hidden" th:field="*{donacion}" />
+        <input type="hidden" th:field="*{becado}" />
+
+        <div class="grid grid-cols-1 gap-8">
+            <!-- Selección de Donación (Deshabilitada si es edición para mantener consistencia de PK) -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Donación</label>
+                <select th:field="*{donacion}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" th:disabled="${donacionBecado.donacion != null}">
+                    <option th:each="d : ${donaciones}" th:value="${d.id}" th:text="${'Ref: ' + d.nombre + ' (Monto: ' + d.cantidad + ')'}"></option>
+                </select>
+            </div>
+
+            <!-- Selección de Becado -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Becado</label>
+                <select th:field="*{becado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" th:disabled="${donacionBecado.becado != null}">
+                    <option th:each="b : ${becados}" th:value="${b.id}" th:text="${b.informacionPersonal.nombre + ' ' + b.informacionPersonal.apellidoPat}"></option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase">Cantidad Asignada (Opcional)</label>
+                    <input type="number" step="0.01" th:field="*{cantidad}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase">Fecha</label>
+                    <input type="date" th:field="*{fecha}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Observación</label>
+                <textarea th:field="*{observacion}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-medium" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="mt-12 pt-10 border-t flex justify-between">
+            <a href="/donaciones-becados" class="text-xs font-black text-slate-400 uppercase">Cancelar</a>
+            <button type="submit" class="bg-indigo-600 text-white px-12 py-5 rounded-3xl font-black shadow-2xl uppercase">Guardar</button>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

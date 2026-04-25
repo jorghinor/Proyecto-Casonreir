@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Gestión - Formulario Médico')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+        <div class="pt-23 pb-12 bg-gradient-to-br from-cyan-600 to-blue-700 text-white text-center shadow-xl">
+            <div class="max-w-4xl mx-auto px-4">
+                <h1 class="text-5xl font-black mb-2 tracking-tighter uppercase italic">Registro de <span class="text-cyan-200">Médico</span></h1>
+                <p class="text-xl opacity-80 font-light">Completa la información del especialista para la red de salud.</p>
+            </div>
+        </div>
+        <form th:action="@{/config/medicos/guardar}" th:object="${medico}" method="post"
+              class="bg-white rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.1)] p-12 border border-slate-100">
+
+            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{informacionPersonal.id}" />
+
+            <div class="flex items-center space-x-4 mb-10 border-b border-slate-50 pb-6">
+                <div class="w-12 h-12 bg-cyan-100 rounded-2xl flex items-center justify-center text-cyan-600 shadow-inner">
+                    <i class="fas fa-stethoscope text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tighter">Información Médica</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombres</label>
+                    <input type="text" th:field="*{informacionPersonal.nombre}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-cyan-100 outline-none text-slate-700 font-bold" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Apellidos</label>
+                    <input type="text" th:field="*{informacionPersonal.apellidoPat}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-cyan-100 outline-none text-slate-700 font-bold" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Documento (CI)</label>
+                    <input type="text" th:field="*{informacionPersonal.ci}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-cyan-100 outline-none text-slate-700 font-bold">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Especialidad</label>
+                    <select th:field="*{especialidad}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-cyan-100 outline-none text-slate-700 font-bold cursor-pointer">
+                        <option th:each="esp : ${especialidades}" th:value="${esp.id}" th:text="${esp.nombre}"></option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Estado</label>
+                    <select th:field="*{estado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-cyan-100 outline-none text-slate-700 font-bold cursor-pointer">
+                        <option value="ACTIVO">ACTIVO</option>
+                        <option value="INACTIVO">INACTIVO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-10 border-t border-slate-100 flex justify-between items-center">
+                <a href="/config/medicos" class="text-xs font-black text-slate-400 hover:text-slate-600 transition tracking-widest uppercase">Cancelar</a>
+                <button type="submit" class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 active:scale-95 transition-all">
+                    GUARDAR ESPECIALISTA <i class="fas fa-save ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

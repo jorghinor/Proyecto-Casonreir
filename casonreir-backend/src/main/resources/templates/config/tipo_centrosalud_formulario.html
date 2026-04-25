@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Tipo de Centro de Salud')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-3xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-gradient-to-br from-purple-600 to-indigo-800 text-white text-center shadow-xl">
+        <h1 class="text-5xl font-black mb-2 uppercase italic">Tipo de <span class="text-purple-200">Centro</span></h1>
+    </div>
+    <form th:action="@{/config/tipos-centrosalud/guardar}" th:object="${tipoCentro}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border">
+        <input type="hidden" th:field="*{id}" />
+        <div class="grid grid-cols-1 gap-8">
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nombre del Tipo</label>
+                <input type="text" th:field="*{nombre}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" placeholder="EJ: Hospital de 2do Nivel" required>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Estado</label>
+                <select th:field="*{estado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+                    <option value="ACTIVO">ACTIVO</option>
+                    <option value="INACTIVO">INACTIVO</option>
+                </select>
+            </div>
+        </div>
+        <div class="mt-12 pt-10 border-t flex justify-between">
+            <a href="/config/tipos-centrosalud" class="text-xs font-black text-slate-400 uppercase">Volver</a>
+            <button type="submit" class="bg-purple-600 text-white px-12 py-5 rounded-3xl font-black shadow-2xl uppercase">Guardar</button>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

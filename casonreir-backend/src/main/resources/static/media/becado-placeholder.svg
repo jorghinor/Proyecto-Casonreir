@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480" fill="none">
+  <rect width="640" height="480" fill="#E2E8F0"/>
+  <rect x="180" y="80" width="280" height="280" rx="140" fill="#93C5FD"/>
+  <circle cx="320" cy="190" r="72" fill="#DBEAFE"/>
+  <rect x="206" y="278" width="228" height="130" rx="65" fill="#DBEAFE"/>
+  <text x="320" y="448" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1E3A8A">
+    SIN FOTO
+  </text>
+</svg>

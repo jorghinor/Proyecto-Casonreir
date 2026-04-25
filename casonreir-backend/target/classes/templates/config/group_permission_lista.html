@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Asignación de Permisos')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+<main class="max-w-[1000px] mx-auto px-6 pt-32 pb-20">
+    <div class="flex justify-between items-center mb-10">
+        <h1 class="text-3xl font-black text-slate-800 uppercase italic">Permisos por <span class="text-indigo-600">Grupo</span></h1>
+        <a th:href="@{/config/grupos-permisos/nuevo}" class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-black text-xs uppercase shadow-lg">+ Asignar Permiso</a>
+    </div>
+
+    <div class="bg-white p-4 rounded-3xl shadow-lg border border-slate-100 mb-8">
+        <form th:action="@{/config/grupos-permisos}" method="get" class="flex gap-4">
+            <input type="text" name="buscar" th:value="${buscar}" placeholder="Buscar por grupo o permiso..." class="flex-1 px-6 py-3 bg-slate-50 border-0 rounded-2xl font-bold outline-none">
+            <button type="submit" class="bg-slate-900 text-white px-8 rounded-2xl font-black text-xs uppercase hover:bg-indigo-600">Buscar</button>
+        </form>
+    </div>
+
+    <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border">
+        <table class="w-full text-left">
+            <thead class="bg-slate-50 border-b text-[10px] font-black text-slate-400 uppercase">
+            <tr>
+                <th class="px-8 py-6">Grupo / Rol</th>
+                <th class="px-8 py-6">Permiso Asignado</th>
+                <th class="px-8 py-6 text-right">Acciones</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y">
+            <tr th:each="item : ${lista}">
+                <td class="px-8 py-6 font-black text-slate-800" th:text="${item.group.name}"></td>
+                <td class="px-8 py-6">
+                    <span class="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-lg font-bold text-xs" th:text="${item.permission.name}"></span>
+                </td>
+                <td class="px-8 py-6 text-right">
+                    <a th:href="@{'/config/grupos-permisos/eliminar/' + ${item.group.id} + '/' + ${item.permission.id}}"
+                       class="text-rose-600 font-bold text-xs uppercase" onclick="return confirm('¿Quitar permiso?')">Quitar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

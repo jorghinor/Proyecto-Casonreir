@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Administración - Reportes')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+    <div th:replace="~{fragments :: menu}"></div>
+    <main class="max-w-[1400px] mx-auto px-6 pt-32 pb-20">
+        <div class="flex justify-between items-center mb-10" data-aos="fade-down">
+            <div>
+                <h1 class="text-4xl font-black text-slate-800 tracking-tighter uppercase italic text-blue-900">Historial de <span class="text-blue-600">Reportes</span></h1>
+                <p class="text-slate-400 font-bold text-xs uppercase tracking-widest mt-1">Archivo de informes y análisis generados</p>
+            </div>
+            <button class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black shadow-xl hover:bg-blue-700 transition-all flex items-center">
+                <i class="fas fa-file-export mr-3 text-xl"></i> NUEVO INFORME
+            </button>
+        </div>
+
+        <div class="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100" data-aos="zoom-in">
+            <table class="w-full text-left">
+                <thead class="bg-slate-900 text-white">
+                    <tr class="text-[10px] font-black uppercase tracking-[0.2em]">
+                        <th class="px-8 py-6">Informe / Título</th>
+                        <th class="px-8 py-6 text-center">Fecha Generación</th>
+                        <th class="px-8 py-6">Detalle Técnico</th>
+                        <th class="px-8 py-6 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <tr th:each="r : ${reportes}" class="hover:bg-blue-50/20 transition-all group">
+                        <td class="px-8 py-6">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 group-hover:rotate-12 transition-transform">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <p class="font-black text-slate-800 text-sm uppercase" th:text="${r.nombre}"></p>
+                            </div>
+                        </td>
+                        <td class="px-8 py-6 text-center">
+                            <span class="bg-slate-100 text-slate-500 px-4 py-1 rounded-lg text-xs font-black uppercase tracking-tighter" th:text="${r.fecha}">-</span>
+                        </td>
+                        <td class="px-8 py-6">
+                            <p class="text-slate-400 text-xs italic truncate max-w-xs" th:text="${r.detalle}"></p>
+                        </td>
+                        <td class="px-8 py-6 text-right space-x-2 text-blue-500 font-black text-xs">
+                            <a href="#" class="hover:text-blue-700 uppercase tracking-widest"><i class="fas fa-download mr-1"></i> Bajar</a>
+                            <span class="text-slate-200 mx-2">|</span>
+                            <a th:href="@{'/config/reportes/eliminar/' + ${r.id}}" onclick="return confirm('¿Eliminar registro de reporte?')" class="text-rose-400 hover:text-rose-600 uppercase tracking-widest">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- PAGINACIÓN -->
+            <div class="bg-slate-50/50 px-8 py-6 flex justify-between items-center border-t border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Archivo Digital <span class="text-slate-800" th:text="${currentPage + 1}"></span> / <span th:text="${totalPages}"></span></p>
+                <div class="flex space-x-2">
+                    <a th:if="${currentPage > 0}" th:href="@{/config/reportes(page=${currentPage - 1})}" class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-slate-600 hover:bg-blue-600 hover:text-white transition-all">ANTERIOR</a>
+                    <a th:if="${currentPage + 1 < totalPages}" th:href="@{/config/reportes(page=${currentPage + 1})}" class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-slate-600 hover:bg-blue-600 hover:text-white transition-all">SIGUIENTE</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

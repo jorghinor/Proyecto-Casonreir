@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Asignar Permiso a Grupo')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-3xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-indigo-600 text-white text-center"><h1 class="text-5xl font-black mb-2 uppercase italic">Asignar Permiso</h1></div>
+    <form th:action="@{/config/grupos-permisos/guardar}" th:object="${groupPermission}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border">
+        <div class="space-y-6">
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Seleccionar Grupo</label>
+                <select th:field="*{group}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+                    <option th:each="g : ${grupos}" th:value="${g.id}" th:text="${g.name}"></option>
+                </select>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Seleccionar Permiso</label>
+                <select th:field="*{permission}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+                    <option th:each="p : ${permisos}" th:value="${p.id}" th:text="${p.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="mt-12 pt-10 border-t flex justify-between">
+            <a href="/config/grupos-permisos" class="text-xs font-black text-slate-400 uppercase">Volver</a>
+            <button type="submit" class="bg-indigo-600 text-white px-12 py-5 rounded-3xl font-black shadow-xl uppercase">Asignar Permiso</button>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

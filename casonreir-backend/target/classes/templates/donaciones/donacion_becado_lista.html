@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Asignación de Donaciones')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-[1500px] mx-auto px-6 pt-32 pb-20">
+    <div class="flex justify-between items-center mb-10">
+        <div>
+            <h1 class="text-4xl font-black text-slate-800 uppercase italic">Donaciones por <span class="text-blue-600">Becado</span></h1>
+            <p class="text-slate-400 font-bold text-xs uppercase">Vínculos de recursos y beneficiarios</p>
+        </div>
+        <a th:href="@{/donaciones-becados/nuevo}" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black shadow-xl uppercase transition-all hover:scale-105">
+            <i class="fas fa-plus-circle mr-2"></i> ASIGNAR DONACIÓN
+        </a>
+    </div>
+
+    <!-- BUSCADOR -->
+    <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-8">
+        <form th:action="@{/donaciones-becados}" method="get" class="flex gap-4">
+            <div class="relative flex-1">
+                <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                <input type="text" name="buscar" th:value="${buscar}" placeholder="Buscar por nombre de becado..."
+                       class="w-full pl-14 pr-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-blue-100 outline-none font-bold">
+            </div>
+            <button type="submit" class="bg-slate-900 text-white px-10 rounded-2xl font-black text-xs uppercase hover:bg-blue-600 transition-all">Buscar</button>
+        </form>
+    </div>
+
+    <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+        <table class="w-full text-left">
+            <thead class="bg-slate-50 border-b">
+            <tr class="text-[10px] font-black text-slate-400 uppercase">
+                <th class="px-8 py-6">Becado</th>
+                <th class="px-8 py-6">Donación Ref.</th>
+                <th class="px-8 py-6">Cantidad</th>
+                <th class="px-8 py-6">Fecha</th>
+                <th class="px-8 py-6 text-right">Acciones</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+            <tr th:each="db : ${donacionesBecados}" class="hover:bg-blue-50/10 transition-all group">
+                <td class="px-8 py-6 font-black">
+                    <span th:text="${db.becado.informacionPersonal.nombre + ' ' + db.becado.informacionPersonal.apellidoPat}"></span>
+                </td>
+                <td class="px-8 py-6 text-slate-500">
+                    <span th:text="${'Ref: ' + db.donacion.nombre + ' (Total: ' + db.donacion.cantidad + ')'}"></span>
+                </td>
+                <td class="px-8 py-6 font-bold text-emerald-600" th:text="${'Bs. ' + db.cantidad}"></td>
+                <td class="px-8 py-6 text-slate-500" th:text="${db.fecha}"></td>
+                <td class="px-8 py-6 text-right space-x-2">
+                    <a th:href="@{'/donaciones-becados/editar/' + ${db.donacion.id} + '/' + ${db.becado.id}}" class="text-blue-600 font-bold uppercase text-xs mr-2">Editar</a>
+                    <a th:href="@{'/donaciones-becados/eliminar/' + ${db.donacion.id} + '/' + ${db.becado.id}}"
+                       class="text-rose-600 font-bold uppercase text-xs"
+                       onclick="return confirm('¿Eliminar esta asignación?')">Quitar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- PAGINACIÓN -->
+        <div class="bg-slate-50 px-8 py-6 flex justify-between items-center border-t border-slate-100">
+            <p class="text-[10px] font-black text-slate-400 uppercase">
+                Página <span class="text-slate-800 font-black" th:text="${currentPage + 1}">1</span> de <span th:text="${totalPages}">1</span>
+            </p>
+            <div class="flex space-x-2">
+                <a th:if="${currentPage > 0}" th:href="@{/donaciones-becados(page=${currentPage - 1}, buscar=${buscar})}"
+                   class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase transition-all hover:bg-blue-600 hover:text-white">Anterior</a>
+                <a th:if="${currentPage + 1 < totalPages}" th:href="@{/donaciones-becados(page=${currentPage + 1}, buscar=${buscar})}"
+                   class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase transition-all hover:bg-blue-600 hover:text-white">Siguiente</a>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

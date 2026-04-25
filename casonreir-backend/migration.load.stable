@@ -1,0 +1,15 @@
+LOAD DATABASE
+FROM mysql://root:root@mysql/casonreir
+INTO postgresql://user_admin:password_secret@db/casonreir
+
+WITH include drop, create tables, create indexes, reset sequences, foreign keys, quote identifiers
+
+CAST type datetime to timestamptz,
+     type date drop default drop not null using zero-dates-to-null,
+     type tinyint to boolean drop typemod,
+     type int with extra auto_increment to serial drop typemod,
+     type int to integer drop typemod
+
+ALTER SCHEMA 'casonreir' RENAME TO 'public'
+
+SET search_path to 'public';

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Gestión de Usuario - Casonreir')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-gradient-to-br from-orange-600 to-red-700 text-white text-center shadow-xl">
+        <h1 class="text-5xl font-black mb-2 uppercase italic">Perfil de <span class="text-orange-200">Usuario</span></h1>
+    </div>
+    <!-- El objeto es "user" -->
+    <form th:action="@{/config/usuarios/guardar}" th:object="${user}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border">
+
+        <!-- Cambiamos las referencias a *{id} para que sea más seguro -->
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div class="space-y-6">
+                <h3 class="text-lg font-black text-slate-800 border-b pb-2">Datos Personales</h3>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase">Nombre(s)</label>
+                    <input type="text" th:field="*{firstName}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase">Apellidos</label>
+                    <input type="text" th:field="*{lastName}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase">Correo Electrónico</label>
+                    <!-- Usamos el nombre exacto del campo en tu modelo: email_address -->
+                    <input type="email" th:field="*{email_address}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <h3 class="text-lg font-black text-slate-800 border-b pb-2">Credenciales</h3>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-orange-600 uppercase italic">Nombre de Usuario (LOGIN)</label>
+                    <input type="text" th:field="*{username}" class="w-full px-6 py-4 bg-orange-50 border-2 border-orange-100 rounded-2xl font-black" required>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase">Contraseña</label>
+                    <input type="password" name="password" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+                    <p class="text-[9px] text-slate-400 mt-1" th:if="*{id != null}">* Dejar en blanco para no cambiar.</p>
+                </div>
+
+                <div class="flex items-center space-x-8 pt-4">
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" th:field="*{isActive}" class="w-5 h-5 text-orange-600 rounded-lg">
+                        <span class="text-sm font-bold text-slate-700">Activo</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" th:field="*{isSuperAdmin}" class="w-5 h-5 text-orange-600 rounded-lg">
+                        <span class="text-sm font-bold text-slate-700">Super Admin</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 pt-10 border-t flex justify-between items-center">
+            <a href="/config/usuarios" class="text-xs font-black text-slate-400 uppercase">Cancelar</a>
+            <button type="submit" class="bg-orange-600 text-white px-12 py-5 rounded-3xl font-black shadow-xl uppercase">
+                GUARDAR USUARIO
+            </button>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

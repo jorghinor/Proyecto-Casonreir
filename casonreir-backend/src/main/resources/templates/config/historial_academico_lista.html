@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Administración - Historial Académico')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-[1500px] mx-auto px-6 pt-32 pb-20">
+        <!-- HEADER -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10">
+            <div>
+                <h1 class="text-4xl font-black text-slate-800 tracking-tighter uppercase italic text-indigo-600">Historiales Académicos</h1>
+                <p class="text-slate-400 font-bold tracking-widest text-xs mt-1 uppercase">Seguimiento de becados</p>
+            </div>
+            <a th:href="@{/config/historial-academico/nuevo}" class="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black shadow-xl hover:scale-105 transition-all text-xs uppercase flex items-center">
+                <i class="fas fa-plus-circle mr-3"></i> NUEVO REGISTRO
+            </a>
+        </div>
+        <!-- BUSCADOR -->
+        <div class="bg-white p-4 rounded-3xl shadow-lg border border-slate-100 mb-8">
+            <form th:action="@{/config/historial-academico}" method="get" class="flex gap-4">
+                <input type="text" name="buscar" th:value="${buscar}"
+                       placeholder="Buscar por alumno o tipo..."
+                       class="flex-1 px-6 py-3 bg-slate-50 border-0 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-blue-400 transition-all">
+                <button type="submit" class="bg-slate-900 text-white px-8 rounded-2xl font-black text-xs uppercase hover:bg-blue-600 transition-all">Buscar</button>
+            </form>
+        </div>
+        <!-- TABLA -->
+        <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 border-b">
+                    <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        <th class="px-8 py-6">ID</th>
+                        <th class="px-8 py-6">Becado</th>
+                        <th class="px-8 py-6">Rendimiento</th>
+                        <th class="px-8 py-6 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <tr th:each="h : ${historialesAcademicos}" class="hover:bg-indigo-50/10 transition-all group">
+                        <td class="px-8 py-6 font-bold text-slate-400" th:text="${h.id}"></td>
+                        <td class="px-8 py-6">
+                            <p class="font-black text-slate-800 text-sm"
+                               th:text="${h.becado?.informacionPersonal != null ? h.becado.informacionPersonal.nombre + ' ' + h.becado.informacionPersonal.apellidoPat : 'Becado #' + h.becado?.id}"></p>
+                            <p class="text-[9px] text-slate-400 font-bold uppercase" th:text="${h.fecha}"></p>
+                        </td>
+                        <td class="px-8 py-6">
+                            <span th:text="${h.rendimiento}" class="bg-blue-50 text-blue-600 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase"></span>
+                        </td>
+                        <td class="px-8 py-6 text-right space-x-2">
+                            <!-- BOTÓN VER -->
+                            <a th:href="@{'/config/historial-academico/detalle/' + ${h.id}}" class="inline-flex w-10 h-10 bg-slate-100 text-blue-600 rounded-xl items-center justify-center hover:bg-blue-600 hover:text-white transition-all shadow-sm"><i class="fas fa-eye text-xs"></i></a>
+                            <!-- BOTÓN EDITAR -->
+                            <a th:href="@{'/config/historial-academico/editar/' + ${h.id}}" class="inline-flex w-10 h-10 bg-slate-100 text-slate-600 rounded-xl items-center justify-center hover:bg-indigo-600 hover:text-white transition-all shadow-sm"><i class="fas fa-pen text-xs"></i></a>
+                            <!-- BOTÓN ELIMINAR -->
+                            <a th:href="@{'/config/historial-academico/eliminar/' + ${h.id}}" onclick="return confirm('¿Eliminar registro académico?')" class="inline-flex w-10 h-10 bg-slate-100 text-slate-400 rounded-xl items-center justify-center hover:bg-rose-600 hover:text-white transition-all shadow-sm"><i class="fas fa-trash-alt text-xs"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- PAGINACIÓN -->
+        <div class="mt-10 flex justify-center items-center gap-2" th:if="${totalPages > 1}">
+            <a th:if="${currentPage > 0}" th:href="@{|/config/historial-academico?page=${currentPage - 1}&buscar=${buscar ?: ''}|}"
+               class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg"><i class="fas fa-chevron-left"></i></a>
+            <div class="flex gap-1">
+                <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                   th:href="@{|/config/historial-academico?page=${i}&buscar=${buscar ?: ''}|}"
+                   th:text="${i + 1}"
+                   th:classappend="${i == currentPage} ? 'bg-blue-600 text-white' : 'bg-white text-slate-400'"
+                   class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs shadow-md transition-all"></a>
+            </div>
+            <a th:if="${currentPage + 1 < totalPages}" th:href="@{|/config/historial-academico?page=${currentPage + 1}&buscar=${buscar ?: ''}|}"
+               class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg"><i class="fas fa-chevron-right"></i></a>
+        </div>
+    </main>
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

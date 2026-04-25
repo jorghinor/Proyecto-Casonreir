@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Expediente del Becado')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-[1600px] mx-auto px-6 pt-32 pb-20">
+
+        <!-- CABECERA DEL EXPEDIENTE -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6" data-aos="fade-down">
+            <div class="flex items-center space-x-6">
+                <div class="w-24 h-24 bg-blue-600 rounded-[2rem] flex items-center justify-center text-white text-4xl shadow-2xl shadow-blue-200">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div>
+                    <h1 class="text-4xl font-black text-slate-800 tracking-tighter uppercase italic" th:text="${becado.informacionPersonal.nombre + ' ' + becado.informacionPersonal.apellidoPat}"></h1>
+                    <div class="flex items-center space-x-3 mt-2">
+                        <span class="px-4 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest border border-emerald-100 uppercase" th:text="${becado.estadoBecado}"></span>
+                        <p class="text-slate-400 font-bold text-xs">CI: <span th:text="${becado.informacionPersonal.ci}"></span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex space-x-3">
+                <a th:href="@{'/becados/editar/' + ${becado.id}}" class="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black shadow-xl hover:bg-blue-600 transition-all uppercase text-xs">Editar Ficha</a>
+                <button onclick="window.print()" class="w-14 h-14 bg-white text-slate-400 rounded-2xl flex items-center justify-center shadow-lg hover:text-blue-600 transition-all border border-slate-100">
+                    <i class="fas fa-print"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+            <!-- COLUMNA 1: INFO PERSONAL Y FAMILIA -->
+            <div class="space-y-10">
+                <div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100" data-aos="fade-right">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-8 flex items-center">
+                        <i class="fas fa-info-circle mr-2 text-blue-500"></i> Datos de Contacto
+                    </h3>
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-300 uppercase">Dirección</p>
+                            <p class="font-bold text-slate-700 mt-1" th:text="${becado.informacionPersonal.direccion}"></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-slate-300 uppercase">Fecha de Nacimiento</p>
+                            <p class="font-bold text-slate-700 mt-1" th:text="${becado.informacionPersonal.fechaNac}"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100" data-aos="fade-right">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-8 flex items-center">
+                        <i class="fas fa-users mr-2 text-orange-500"></i> Núcleo Familiar
+                    </h3>
+                    <div class="space-y-4">
+                        <div th:each="fam : ${familiares}" class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <p class="font-black text-slate-800 text-sm" th:text="${fam.nombre + ' ' + fam.apellidoPaterno}"></p>
+                            <p class="text-[10px] font-bold text-orange-500 uppercase" th:text="${fam.parentesco}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUMNA 2: HISTORIALES -->
+            <div class="space-y-10 lg:col-span-2">
+                <div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100" data-aos="fade-up">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-8 flex items-center">
+                        <i class="fas fa-book mr-2 text-indigo-500"></i> Rendimiento Académico
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div th:each="hist : ${historialAcademico}" class="p-6 bg-indigo-50/30 rounded-3xl border border-indigo-50">
+                            <p class="font-black text-indigo-600 text-xs mb-2" th:text="${hist.tipo}"></p>
+                            <p class="font-bold text-slate-800" th:text="${hist.observacion}"></p>
+                            <div class="mt-4 flex justify-between items-center">
+                                <span class="text-[10px] font-black text-slate-400 uppercase" th:text="${hist.fecha}"></span>
+                                <span class="px-3 py-1 bg-white rounded-lg text-xs font-black text-indigo-500 shadow-sm" th:text="${hist.rendimiento}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100" data-aos="fade-up">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-8 flex items-center">
+                        <i class="fas fa-notes-medical mr-2 text-rose-500"></i> Seguimiento Médico
+                    </h3>
+                    <div class="space-y-4">
+                        <div th:each="med : ${historialMedico}" class="flex items-center justify-between p-6 bg-rose-50/20 rounded-3xl border border-rose-50">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center text-rose-500"><i class="fas fa-stethoscope"></i></div>
+                                <div>
+                                    <p class="font-bold text-slate-800" th:text="${med.detalle}"></p>
+                                    <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest" th:text="${med.fecha}"></p>
+                                </div>
+                            </div>
+                            <p class="font-black text-rose-600" th:text="${'Bs. ' + med.costo}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

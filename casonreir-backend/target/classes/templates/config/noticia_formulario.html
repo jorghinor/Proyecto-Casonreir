@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Gestión de Noticia')}"></head>
+<!-- LIBRERÍA DEL EDITOR -->
+<script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+<body class="bg-slate-50 font-sans">
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <div class="pt-32 pb-12 bg-blue-600 text-white text-center shadow-xl">
+        <h1 class="text-5xl font-black mb-2 uppercase italic">Redacción de <span class="text-blue-200">Noticia</span></h1>
+    </div>
+
+    <main class="max-w-5xl mx-auto px-4 py-16 -mt-10">
+        <form th:action="@{/config/noticias/guardar}" th:object="${noticia}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100">
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="space-y-8">
+                <!-- TÍTULO -->
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Título de la Noticia</label>
+                    <input type="text" th:field="*{nombre}" class="w-full px-8 py-5 bg-slate-50 border-0 rounded-2xl font-bold text-xl focus:ring-2 focus:ring-blue-400 outline-none transition-all" placeholder="Escribe un titular impactante..." required>
+                </div>
+
+                <!-- FECHA -->
+                <div class="w-full md:w-1/3 space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Fecha de Publicación</label>
+                    <input type="date" th:field="*{fechaInicio}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold focus:ring-2 focus:ring-blue-400 outline-none transition-all">
+                </div>
+
+                <!-- CONTENIDO CON EDITOR ENRIQUECIDO -->
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Contenido Detallado</label>
+                    <div class="rounded-2xl overflow-hidden border border-slate-100">
+                        <textarea th:field="*{detalle}" id="editor" class="hidden"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-10 border-t flex justify-between items-center">
+                <a href="/config/noticias" class="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors">Cancelar</a>
+                <button type="submit" class="bg-blue-600 text-white px-12 py-5 rounded-3xl font-black shadow-xl uppercase tracking-widest hover:scale-105 transition-all">Publicar Noticia</button>
+            </div>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+    <script>
+        // Inicialización de CKEditor 5
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'],
+                placeholder: 'Escribe el contenido aquí...'
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    <style>
+        /* Ajuste de altura del editor para que se vea premium */
+        .ck-editor__editable {
+            min-height: 400px;
+            padding: 2rem !important;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #334155;
+            background-color: #f8fafc !important;
+            border: none !important;
+        }
+        .ck-toolbar {
+            background-color: #ffffff !important;
+            border: none !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+            padding: 0.5rem !important;
+        }
+    </style>
+</body>
+</html>

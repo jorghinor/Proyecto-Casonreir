@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Nueva Asignación')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-3xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-gradient-to-br from-blue-700 to-indigo-900 text-white text-center">
+        <h1 class="text-5xl font-black mb-2 uppercase italic">Vincular Encargado</h1>
+    </div>
+    <form th:action="@{/config/encargados-centros/guardar}" th:object="${encargadoCentro}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100">
+        <div class="space-y-6">
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Seleccionar Encargado</label>
+                <select th:field="*{encargado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+                    <option th:each="e : ${encargados}" th:value="${e.id}" th:text="${e.informacionPersonal.nombre + ' ' + e.informacionPersonal.apellidoPat}"></option>
+                </select>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Seleccionar Sede (C.E.A.)</label>
+                <select th:field="*{centroApoyo}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+                    <option th:each="c : ${centros}" th:value="${c.id}" th:text="${c.nombre}"></option>
+                </select>
+            </div>
+            <div class="grid grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase">Fecha Inicio</label>
+                    <input type="date" th:field="*{fechaInicio}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase">Estado</label>
+                    <select th:field="*{estado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+                        <option value="ACTIVO">ACTIVO</option>
+                        <option value="INACTIVO">INACTIVO</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="mt-12 pt-10 border-t flex justify-between">
+            <a href="/config/encargados-centros" class="text-xs font-black text-slate-400 uppercase">Volver</a>
+            <button type="submit" class="bg-blue-600 text-white px-12 py-5 rounded-3xl font-black shadow-xl uppercase">Guardar Vínculo</button>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Casonreir - Centro de Salud')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal">
+    <div th:replace="~{fragments :: menu}"></div>
+    <div class="pt-32 pb-12 bg-gradient-to-br from-cyan-500 to-blue-600 text-white text-center shadow-xl">
+        <div class="max-w-4xl mx-auto px-4" data-aos="zoom-in">
+            <i class="fas fa-hospital-user text-5xl mb-4 text-cyan-100 animate-pulse"></i>
+            <h1 class="text-6xl font-black mb-2 tracking-tighter" th:text="${centroSalud.id != null ? 'EDITAR CENTRO DE SALUD' : 'CENTRO DE SALUD'}">CENTRO DE SALUD</h1>
+            <p class="text-xl opacity-90 font-light" th:text="${centroSalud.id != null ? 'Actualiza la información del centro médico seleccionado.' : 'Registra centros médicos para el seguimiento de los becados.'}">Registra centros médicos para el seguimiento de los becados.</p>
+        </div>
+    </div>
+    <main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+        <form th:action="@{/config/centrosalud/guardar}" th:object="${centroSalud}" method="post"
+              class="bg-white rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.1)] p-12" data-aos="fade-up">
+            <input type="hidden" th:field="*{id}" />
+            <div class="space-y-8">
+                <div class="space-y-2">
+                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Nombre del Centro</label>
+                    <input type="text" th:field="*{nombre}" placeholder="Ej. Hospital Materno Infantil"
+                           class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-cyan-100 outline-none text-slate-700 font-bold" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Dirección</label>
+                    <div class="relative">
+                        <i class="fas fa-map-marker-alt absolute left-6 top-1/2 -translate-y-1/2 text-cyan-400"></i>
+                        <input type="text" th:field="*{direccion}" placeholder="Ej. Av. Blanco Galindo Km 5"
+                               class="w-full pl-14 pr-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none text-slate-700 font-bold">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Teléfono / Contacto</label>
+                    <div class="relative">
+                        <i class="fas fa-phone absolute left-6 top-1/2 -translate-y-1/2 text-cyan-400"></i>
+                        <input type="text" th:field="*{telefono}" placeholder="Ej. 44223344"
+                               class="w-full pl-14 pr-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none text-slate-700 font-bold">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-10 border-t border-slate-100 flex justify-between items-center">
+                <a href="/config/centrosalud" class="text-xs font-black text-slate-400 hover:text-slate-600 transition tracking-widest uppercase">Cancelar</a>
+                <button type="submit" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 transition-all">
+                    <span th:text="${centroSalud.id != null ? 'ACTUALIZAR CENTRO' : 'GUARDAR CENTRO'}">GUARDAR CENTRO</span> <i class="fas fa-save ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+    <footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

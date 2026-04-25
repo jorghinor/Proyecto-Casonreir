@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Casonreir - Instituciones')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal">
+    <div th:replace="~{fragments :: menu}"></div>
+    <div class="pt-32 pb-12 bg-gradient-to-br from-slate-700 to-slate-900 text-white text-center shadow-xl">
+        <div class="max-w-4xl mx-auto px-4" data-aos="zoom-in">
+            <i class="fas fa-university text-5xl mb-4 text-slate-300"></i>
+            <h1 class="text-6xl font-black mb-2 tracking-tighter">INSTITUCIONES <span class="text-blue-400">ALIADAS</span></h1>
+            <p class="text-xl opacity-90 font-light">Gestiona las organizaciones vinculadas a la fundación.</p>
+        </div>
+    </div>
+    <main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+        <form th:action="@{/instituciones}" th:object="${institucion}" method="post"
+              class="bg-white rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.1)] p-12" data-aos="fade-up">
+            <div class="space-y-8">
+                <div class="space-y-2">
+                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Nombre de la Institución</label>
+                    <input type="text" th:field="*{nombre}" placeholder="Ej. Universidad Mayor de San Simón"
+                           class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-slate-200 outline-none text-slate-700 font-bold" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Ubicación</label>
+                    <input type="text" th:field="*{direccion}" placeholder="Ej. Calle Jordán e/ Oquendo"
+                           class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-slate-200 outline-none text-slate-700 font-bold">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Teléfono Corporativo</label>
+                    <input type="text" th:field="*{telefono}" placeholder="Ej. 4112233"
+                           class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none text-slate-700 font-bold">
+                </div>
+            </div>
+            <div class="mt-12 pt-10 border-t border-slate-100 flex justify-end">
+                <button type="submit" class="bg-slate-800 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:bg-blue-600 transition-all transform hover:scale-105">
+                    REGISTRAR INSTITUCIÓN <i class="fas fa-handshake ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+    <footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

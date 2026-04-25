@@ -1,0 +1,33 @@
+<div th:fragment="report">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-black text-slate-800 uppercase italic">Listado de Padrinos</h2>
+        <a th:href="@{/config/reportes/padrinos-pdf}"
+           class="bg-amber-500 text-white px-6 py-2 rounded-xl font-black text-xs uppercase shadow-lg flex items-center">
+            <i class="fas fa-file-pdf mr-2"></i> Descargar PDF
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+            <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b">
+                <th class="py-4 px-2">Nombre</th>
+                <th class="py-4 px-2">CI</th>
+                <th class="py-4 px-2">Contacto</th>
+                <th class="py-4 px-2">Estado</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+            <tr th:each="p : ${padrinos}" class="text-sm hover:bg-slate-50">
+                <td class="py-4 px-2 font-bold text-slate-700"
+                    th:text="${p.informacionPersonal?.nombre + ' ' + p.informacionPersonal?.apellidoPat}"></td>
+                <td class="py-4 px-2 text-slate-500" th:text="${p.informacionPersonal?.ci}"></td>
+                <td class="py-4 px-2 text-slate-600" th:text="${p.informacionPersonal?.telefonoCel}"></td>
+                <td class="py-4 px-2">
+                    <span th:text="${p.estado ?: 'ACTIVO'}" class="bg-amber-50 text-amber-600 px-3 py-1 rounded-lg text-[10px] font-black uppercase"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

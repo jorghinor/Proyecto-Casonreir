@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Centros de Salud')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+<main class="max-w-[1500px] mx-auto px-6 pt-32 pb-20">
+    <div class="flex justify-between items-center mb-10">
+        <div>
+            <h1 class="text-4xl font-black text-slate-800 uppercase italic text-purple-600">Centros de Salud</h1>
+            <p class="text-slate-400 font-bold text-xs uppercase">Gestión de la red de salud</p>
+        </div>
+        <a th:href="@{/config/centrosalud/nuevo}" class="bg-purple-600 text-white px-8 py-4 rounded-2xl font-black shadow-xl uppercase text-xs">Nuevo Centro</a>
+    </div>
+
+    <!-- BUSCADOR -->
+    <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-8">
+        <form th:action="@{/config/centrosalud}" method="get" class="flex gap-4">
+            <input type="text" name="buscar" th:value="${buscar}" placeholder="Buscar por nombre o dirección..." class="flex-1 px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold outline-none">
+            <button type="submit" class="bg-slate-900 text-white px-10 rounded-2xl font-black text-xs uppercase hover:bg-purple-600 transition-all">Buscar</button>
+        </form>
+    </div>
+
+    <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border">
+        <table class="w-full text-left">
+            <thead class="bg-slate-50 border-b">
+            <tr class="text-[10px] font-black text-slate-400 uppercase">
+                <th class="px-8 py-6">Nombre</th>
+                <th class="px-8 py-6">Tipo</th>
+                <th class="px-8 py-6">Teléfono / Dirección</th>
+                <th class="px-8 py-6 text-right">Acciones</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y">
+            <tr th:each="c : ${centros}">
+                <td class="px-8 py-6 font-black text-slate-800" th:text="${c.nombre}"></td>
+                <td class="px-8 py-6 text-sm" th:text="${c.tipoCentroSalud?.nombre}"></td>
+                <td class="px-8 py-6">
+                    <p class="font-bold text-slate-700" th:text="${c.telefono}"></p>
+                    <p class="text-xs text-slate-400" th:text="${c.direccion}"></p>
+                </td>
+                <td class="px-8 py-6 text-right space-x-2">
+                    <a th:href="@{'/config/centrosalud/editar/' + ${c.id}}" class="text-blue-600 font-bold text-xs uppercase">Editar</a>
+                    <a th:href="@{'/config/centrosalud/eliminar/' + ${c.id}}" class="text-rose-600 font-bold text-xs uppercase" onclick="return confirm('¿Eliminar?')">Eliminar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- PAGINACIÓN -->
+        <div class="bg-slate-50 px-8 py-6 flex justify-between items-center border-t">
+            <p class="text-[10px] font-black text-slate-400 uppercase">Página <span th:text="${currentPage + 1}"></span> de <span th:text="${totalPages}"></span></p>
+            <div class="flex space-x-2">
+                <a th:if="${currentPage > 0}" th:href="@{/config/centrosalud(page=${currentPage - 1}, buscar=${buscar})}" class="px-4 py-2 bg-white border rounded-xl text-[10px] font-black">Anterior</a>
+                <a th:if="${currentPage + 1 < totalPages}" th:href="@{/config/centrosalud(page=${currentPage + 1}, buscar=${buscar})}" class="px-4 py-2 bg-white border rounded-xl text-[10px] font-black">Siguiente</a>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Administración - Donaciones')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-[1500px] mx-auto px-6">
+        <!-- El Magic Script convertirá esto en un Banner Premium automáticamente -->
+        <div class="flex justify-between items-center mb-10 pt-32">
+            <h1 class="text-4xl font-black text-slate-800 uppercase italic">Control de Donaciones</h1>
+            <div class="flex items-center gap-4">
+                <div class="bg-emerald-600 text-white px-8 py-3 rounded-2xl font-black shadow-lg">
+                    TOTAL PÁGINA: Bs. <span th:text="${#numbers.formatDecimal(totalPagina, 1, 2)}">0.00</span>
+                </div>
+                <a th:href="@{/donaciones/nuevo}" class="bg-slate-900 text-white px-8 py-3 rounded-2xl font-black shadow-xl hover:bg-emerald-600 transition-all text-xs uppercase">+ Registrar</a>
+            </div>
+        </div>
+
+        <!-- BUSCADOR -->
+        <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-12 flex flex-col md:flex-row gap-4 items-center">
+            <form th:action="@{/donaciones}" method="get" class="flex-1 w-full flex gap-4">
+                <input type="text" name="buscar" th:value="${buscar}" placeholder="Buscar por donante o detalle..." class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold">
+                <button type="submit" class="bg-slate-900 text-white px-8 rounded-2xl font-black text-xs uppercase hover:bg-emerald-600 transition-all">Filtrar</button>
+            </form>
+        </div>
+
+        <!-- TABLA: El Magic Script le pondrá el contenedor Premium -->
+        <table class="w-full text-left">
+            <thead>
+                <tr>
+                    <th class="px-8 py-6">Padrino / Donante</th>
+                    <th class="px-8 py-6">Detalle</th>
+                    <th class="px-8 py-6 text-right">Monto</th>
+                    <th class="px-8 py-6 text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+                <tr th:each="d : ${donaciones}" class="hover:bg-emerald-50/30 transition-all group">
+                    <td class="px-8 py-6">
+                        <p class="font-black text-slate-800 text-sm uppercase">
+                            <span th:if="${d.padrino != null and d.padrino.informacionPersonal != null}"
+                                  th:text="${d.padrino.informacionPersonal.nombre + ' ' + d.padrino.informacionPersonal.apellidoPat}"></span>
+                            <span th:if="${d.padrino == null}" class="text-slate-400 italic">Donante Externo / Institución</span>
+                        </p>
+                    </td>
+                    <td class="px-8 py-6">
+                        <p class="text-slate-600 font-bold text-sm" th:text="${d.nombre}">-</p>
+                        <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest"
+                              th:text="${d.tipoDonacion != null ? d.tipoDonacion.nombre : 'General'}"></span>
+                    </td>
+                    <td class="px-8 py-6 text-right">
+                        <p class="text-xl font-black text-emerald-600">Bs. <span th:text="${#numbers.formatDecimal(d.cantidad, 1, 2)}">0</span></p>
+                    </td>
+                    <td class="px-8 py-6 text-right space-x-2">
+                        <a th:href="@{'/donaciones/editar/' + ${d.id}}" class="inline-flex w-10 h-10 bg-slate-100 text-slate-600 rounded-xl items-center justify-center hover:bg-emerald-600 hover:text-white transition-all shadow-sm"><i class="fas fa-pen text-xs"></i></a>
+                        <a th:href="@{'/donaciones/eliminar/' + ${d.id}}" onclick="return confirm('¿Eliminar?')" class="inline-flex w-10 h-10 bg-slate-100 text-slate-400 rounded-xl items-center justify-center hover:bg-rose-600 hover:text-white transition-all shadow-sm"><i class="fas fa-trash-alt text-xs"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- PAGINACIÓN -->
+        <div class="mt-10 flex justify-center items-center gap-2" th:if="${totalPages > 1}">
+            <a th:if="${currentPage > 0}" th:href="@{/donaciones(page=${currentPage - 1}, buscar=${buscar})}" class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg"><i class="fas fa-chevron-left"></i></a>
+            <div class="flex gap-1">
+                <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                   th:href="@{/donaciones(page=${i}, buscar=${buscar})}"
+                   th:text="${i + 1}"
+                   th:classappend="${i == currentPage} ? 'bg-emerald-600 text-white' : 'bg-white text-slate-400'"
+                   class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs shadow-md transition-all"></a>
+            </div>
+            <a th:if="${currentPage + 1 < totalPages}" th:href="@{/donaciones(page=${currentPage + 1}, buscar=${buscar})}" class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg"><i class="fas fa-chevron-right"></i></a>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Gestión - Información Personal')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-6xl mx-auto px-4 py-16 -mt-10">
+        <div class="pt-23 pb-12 bg-gradient-to-br from-blue-700 to-indigo-900 text-white text-center shadow-xl">
+            <h1 class="text-5xl font-black mb-2 tracking-tighter uppercase italic">Expediente <span class="text-blue-200">Personal</span></h1>
+            <p class="opacity-80 text-sm tracking-widest uppercase">Base de datos maestra de beneficiarios y personal</p>
+        </div>
+        <form th:action="@{/config/personas/guardar}" th:object="${persona}" method="post" enctype="multipart/form-data"
+              class="bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100">
+
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+
+                <!-- Columna Izquierda: Foto -->
+                <div class="lg:col-span-1 space-y-6 text-center">
+                    <div class="relative inline-block group">
+                        <img id="previewFoto" th:src="*{foto != null ? '/uploads/fotos_becados/' + foto : 'https://via.placeholder.com/200/E2E8F0/64748B?text=FOTO'}"
+                             class="w-48 h-48 rounded-[2.5rem] object-cover shadow-2xl border-4 border-white transition-all group-hover:scale-105">
+                        <label class="absolute -bottom-4 -right-4 w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center cursor-pointer shadow-xl hover:bg-blue-700 transition-all">
+                            <i class="fas fa-camera text-xl"></i>
+                            <input type="file" name="fileFoto" class="hidden" accept="image/*" onchange="previewImage(this)">
+                        </label>
+                    </div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Foto de Identidad</p>
+                </div>
+
+                <!-- Columna Derecha: Datos -->
+                <div class="lg:col-span-3 space-y-10">
+
+                    <!-- Bloque: Identidad -->
+                    <div class="space-y-6">
+                        <h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter border-b pb-2">Datos de Identidad</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombres</label>
+                                <input type="text" th:field="*{nombre}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700" required>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Apellido Pat.</label>
+                                <input type="text" th:field="*{apellidoPat}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700" required>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Apellido Mat.</label>
+                                <input type="text" th:field="*{apellidoMat}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Documento CI</label>
+                                <input type="text" th:field="*{ci}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Expedido en</label>
+                                <input type="text" th:field="*{lugarCi}" placeholder="Ej. Cochabamba" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fecha Nacimiento</label>
+                                <input type="date" th:field="*{fechaNac}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bloque: Contacto y Residencia -->
+                    <div class="space-y-6">
+                        <h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter border-b pb-2">Contacto y Residencia</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Celular</label>
+                                <input type="text" th:field="*{telefonoCel}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email</label>
+                                <input type="email" th:field="*{correoE}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700">
+                            </div>
+                            <div class="space-y-1 md:col-span-2">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Dirección Domiciliaria</label>
+                                <textarea th:field="*{direccion}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-medium text-slate-700" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bloque: Documentación -->
+                    <div class="space-y-6">
+                        <h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter border-b pb-2">Archivos Digitales</h2>
+                        <div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-[2rem] p-8 text-center">
+                            <label class="cursor-pointer block">
+                                <i class="fas fa-file-upload text-3xl text-blue-400 mb-2"></i>
+                                <p class="text-xs font-black text-slate-600 uppercase">Cargar Certificado de Nacimiento / Otros</p>
+                                <input type="file" name="fileCertificado" class="mt-4 text-xs">
+                            </label>
+                            <p th:if="*{certificado}" class="text-[10px] text-emerald-600 font-bold mt-4 italic">
+                                <i class="fas fa-check"></i> Archivo registrado: <span th:text="*{certificado}"></span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="mt-12 pt-10 border-t border-slate-100 flex justify-between items-center">
+                <a href="/config/personas" class="text-xs font-black text-slate-400 hover:text-slate-600 transition uppercase tracking-widest">Cancelar</a>
+                <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 active:scale-95 transition-all">
+                    GUARDAR INFORMACIÓN <i class="fas fa-save ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewFoto').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

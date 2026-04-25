@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Asignar Rol')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-3xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-orange-600 text-white text-center"><h1 class="text-5xl font-black mb-2 uppercase italic">Asignar Rol</h1></div>
+    <form th:action="@{/config/usuarios-grupos/guardar}" th:object="${userGroup}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border">
+        <div class="space-y-6">
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Usuario</label>
+                <select th:field="*{user}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+                    <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.username}"></option>
+                </select>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Grupo / Rol</label>
+                <select th:field="*{group}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+                    <option th:each="g : ${grupos}" th:value="${g.id}" th:text="${g.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="mt-12 pt-10 border-t flex justify-between">
+            <a href="/config/usuarios-grupos" class="text-xs font-black text-slate-400">VOLVER</a>
+            <button type="submit" class="bg-orange-600 text-white px-12 py-5 rounded-3xl font-black shadow-xl uppercase">ASIGNAR</button>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

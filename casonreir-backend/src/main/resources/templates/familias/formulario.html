@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Administración - Formulario Familia')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+        <div class="pt-23 pb-12 bg-gradient-to-br from-orange-600 to-red-700 text-white text-center shadow-xl">
+            <h1 class="text-5xl font-black mb-2 tracking-tighter uppercase italic">Ficha <span class="text-orange-200">Familiar</span></h1>
+        </div>
+        <form th:action="@{/familias/guardar}" th:object="${familia}" method="post"
+              class="bg-white rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.1)] p-12 border border-slate-100">
+
+            <!-- CAMPOS OCULTOS PARA ACTUALIZACIÓN -->
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="flex items-center space-x-4 mb-10 border-b border-slate-50 pb-6">
+                <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 shadow-inner">
+                    <i class="fas fa-users text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tighter">Datos del Familiar</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombres</label>
+                    <input type="text" th:field="*{nombre}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none text-slate-700 font-bold" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Ap. Paterno</label>
+                    <input type="text" th:field="*{apellidoPaterno}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none text-slate-700 font-bold" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Ap. Materno</label>
+                    <input type="text" th:field="*{apellidoMaterno}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none text-slate-700 font-bold">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Parentesco</label>
+                    <input type="text" th:field="*{parentesco}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none text-slate-700 font-bold">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Teléfono</label>
+                    <input type="text" th:field="*{telefono}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none text-slate-700 font-bold">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Becado Vinculado</label>
+                    <select th:field="*{becado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none text-slate-700 font-bold cursor-pointer">
+                        <option value="">-- Seleccionar Becado --</option>
+                        <option th:each="b : ${becados}" th:value="${b.id}" th:text="${b.informacionPersonal.nombre + ' ' + b.informacionPersonal.apellidoPat}"></option>
+                    </select>
+                </div>
+                <div class="md:col-span-2 space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Dirección</label>
+                    <textarea th:field="*{direccion}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none text-slate-700 font-medium" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-10 border-t border-slate-100 flex justify-between items-center">
+                <a href="/familias" class="text-xs font-black text-slate-400 hover:text-slate-600 transition uppercase">Cancelar</a>
+                <button type="submit" class="bg-gradient-to-r from-orange-600 to-red-600 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 active:scale-95 transition-all">
+                    GUARDAR FAMILIA <i class="fas fa-save ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

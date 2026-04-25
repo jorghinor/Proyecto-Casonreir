@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Administración - Encargados')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-[1600px] mx-auto px-6 pt-32 pb-20">
+        <!-- HEADER -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10" data-aos="fade-down">
+            <div>
+                <h1 class="text-4xl font-black text-slate-800 tracking-tighter uppercase italic">Gestión de <span class="text-amber-600">Personal</span></h1>
+                <p class="text-slate-400 font-bold tracking-widest text-xs mt-1 uppercase">Encargados de centros y sedes</p>
+            </div>
+            <a href="/config/encargados/nuevo" class="bg-amber-600 text-white px-8 py-4 rounded-2xl font-black shadow-xl hover:scale-105 transition-all">NUEVO ENCARGADO</a>
+        </div>
+
+        <!-- BUSCADOR Y FILTROS -->
+        <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-8 flex flex-col md:flex-row gap-4 items-center">
+            <form th:action="@{/config/encargados}" method="get" class="flex-1 w-full flex gap-4">
+                <div class="relative flex-1">
+                    <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                    <input type="text" name="buscar" th:value="${buscar}" placeholder="Buscar por nombre o cargo..."
+                           class="w-full pl-14 pr-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-amber-100 outline-none text-slate-700 font-bold transition-all">
+                </div>
+                <select name="estado" class="bg-slate-50 border-0 rounded-2xl px-6 font-bold text-slate-600 focus:ring-4 focus:ring-amber-100">
+                    <option value="">Todos los Estados</option>
+                    <option value="ACTIVO" th:selected="${estado == 'ACTIVO'}">Activos</option>
+                    <option value="INACTIVO" th:selected="${estado == 'INACTIVO'}">Inactivos</option>
+                </select>
+                <button type="submit" class="bg-slate-900 text-white px-8 rounded-2xl font-black text-xs tracking-widest hover:bg-amber-600 transition-all">FILTRAR</button>
+            </form>
+            <a href="/config/encargados/nuevo"
+               class="w-full md:w-auto text-center bg-amber-600 text-white px-6 py-4 rounded-2xl font-black text-xs tracking-widest shadow-xl hover:scale-105 transition-all">
+                NUEVO ENCARGADO
+            </a>
+        </div>
+
+        <!-- TABLA -->
+        <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 border-b">
+                    <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        <th class="px-8 py-6">Encargado</th>
+                        <th class="px-8 py-6">Cargo / Función</th>
+                        <th class="px-8 py-6">Sede Asignada</th>
+                        <th class="px-8 py-6">Estado</th>
+                        <th class="px-8 py-6 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <tr th:each="e : ${encargados}" class="hover:bg-amber-50/20 transition-all group">
+                        <td class="px-8 py-6">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 shadow-inner group-hover:rotate-6 transition-transform">
+                                    <i class="fas fa-user-tie text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="font-black text-slate-800 text-lg leading-none" th:text="${e.informacionPersonal.nombre + ' ' + e.informacionPersonal.apellidoPat}"></p>
+                                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest" th:text="${'ID: #' + e.id}"></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-8 py-6 font-black text-slate-600 text-sm uppercase tracking-tighter" th:text="${e.cargo}"></td>
+                        <td class="px-8 py-6 text-slate-500 font-bold" th:text="${e.centroApoyo != null ? e.centroApoyo.nombre : 'Sin asignar'}"></td>
+                        <td class="px-8 py-6">
+                            <span th:text="${e.estado}"
+                                  th:class="${e.estado == 'ACTIVO' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'} + ' px-4 py-1.5 rounded-xl text-[10px] font-black tracking-widest border border-current'">
+                            </span>
+                        </td>
+                        <td class="px-8 py-6 text-right space-x-2">
+                            <a th:href="@{'/config/encargados/editar/' + ${e.id}}" class="inline-flex w-10 h-10 bg-slate-100 text-slate-600 rounded-xl items-center justify-center hover:bg-amber-600 hover:text-white transition-all shadow-sm">
+                                <i class="fas fa-pen text-xs"></i>
+                            </a>
+                            <a th:href="@{'/config/encargados/eliminar/' + ${e.id}}"
+                               onclick="return confirm('¿Eliminar registro de encargado?')"
+                               class="inline-flex w-10 h-10 bg-slate-100 text-slate-400 rounded-xl items-center justify-center hover:bg-rose-600 hover:text-white transition-all shadow-sm">
+                                <i class="fas fa-trash-alt text-xs"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- PAGINACIÓN -->
+            <div class="bg-slate-50/50 px-8 py-6 flex justify-between items-center border-t border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    Página <span class="text-slate-800 font-black" th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">1</span>
+                </p>
+                <div class="flex space-x-2">
+                    <a th:if="${currentPage > 0}" th:href="@{/config/encargados(page=${currentPage - 1}, buscar=${buscar}, estado=${estado})}"
+                       class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-slate-600 hover:bg-amber-600 hover:text-white transition-all">ANTERIOR</a>
+                    <a th:if="${currentPage + 1 < totalPages}" th:href="@{/config/encargados(page=${currentPage + 1}, buscar=${buscar}, estado=${estado})}"
+                       class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-slate-600 hover:bg-amber-600 hover:text-white transition-all">SIGUIENTE</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: casonreir_db
+    environment:
+      - POSTGRES_DB=casonreir
+      - POSTGRES_USER=user_admin
+      - POSTGRES_PASSWORD=password_secret
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  mysql:
+    image: mysql:5.7
+    command: --explicit_defaults_for_timestamp=1
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=casonreir
+    ports:
+      - "3307:3306"
+
+  migrator:
+    image: dimitri/pgloader:latest
+    container_name: pgloader_migrator
+    depends_on:
+      - db
+      - mysql
+    volumes:
+      - ./migration.load:/migration.load
+      - ./bd.sql:/bd.sql
+    command: ["/bin/sh", "-c", "sleep 60 && pgloader /migration.load"]
+
+  app:
+    build: .
+    container_name: casonreir_app
+    ports:
+      - "8082:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/casonreir
+      - SPRING_DATASOURCE_USERNAME=user_admin
+      - SPRING_DATASOURCE_PASSWORD=password_secret
+    volumes:
+      - ./uploads:/app/uploads
+
+volumes:
+  pgdata:

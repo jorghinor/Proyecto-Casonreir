@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Generador de Reportes')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-[1600px] mx-auto px-6 pt-32 pb-20">
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-10">
+        <div>
+            <h1 class="text-4xl font-black text-slate-800 tracking-tighter uppercase italic text-teal-600">Generador de Reportes</h1>
+            <p class="text-slate-400 font-bold tracking-widest text-xs mt-1 uppercase">Informes detallados de la fundación</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Menú de Reportes -->
+        <div class="lg:col-span-1 bg-white rounded-[2.5rem] shadow-xl border border-slate-100 p-6 space-y-2">
+            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Seleccionar Reporte</h3>
+            <a href="#" data-report-type="donaciones-becado" class="report-link flex items-center space-x-3 p-3 hover:bg-blue-50 rounded-xl transition-all group">
+                <i class="fas fa-hand-holding-usd text-blue-600 group-hover:scale-110 transition-transform"></i>
+                <span class="font-black text-slate-800 text-sm">Donaciones por Becado</span>
+            </a>
+            <a href="#" data-report-type="historial-medico" class="report-link flex items-center space-x-3 p-3 hover:bg-rose-50 rounded-xl transition-all group">
+                <i class="fas fa-notes-medical text-rose-600 group-hover:scale-110 transition-transform"></i>
+                <span class="font-black text-slate-800 text-sm">Historial Médico</span>
+            </a>
+            <a href="#" data-report-type="historial-academico" class="report-link flex items-center space-x-3 p-3 hover:bg-indigo-50 rounded-xl transition-all group">
+                <i class="fas fa-graduation-cap text-indigo-600 group-hover:scale-110 transition-transform"></i>
+                <span class="font-black text-slate-800 text-sm">Historial Académico</span>
+            </a>
+            <a href="#" data-report-type="padrinos" class="report-link flex items-center space-x-3 p-3 hover:bg-amber-50 rounded-xl transition-all group">
+                <i class="fas fa-user-friends text-amber-600 group-hover:scale-110 transition-transform"></i>
+                <span class="font-black text-slate-800 text-sm">Padrinos</span>
+            </a>
+            <a href="#" data-report-type="donaciones-general" class="report-link flex items-center space-x-3 p-3 hover:bg-green-50 rounded-xl transition-all group">
+                <i class="fas fa-money-bill-wave text-green-600 group-hover:scale-110 transition-transform"></i>
+                <span class="font-black text-slate-800 text-sm">Donaciones General</span>
+            </a>
+            <a href="#" data-report-type="fundacion-general" class="report-link flex items-center space-x-3 p-3 hover:bg-teal-50 rounded-xl transition-all group">
+                <i class="fas fa-chart-bar text-teal-600 group-hover:scale-110 transition-transform"></i>
+                <span class="font-black text-slate-800 text-sm">Fundación General</span>
+            </a>
+            <a href="#" data-report-type="donaciones-consolidado" class="report-link flex items-center space-x-3 p-3 hover:bg-emerald-50 rounded-xl transition-all group">
+                <i class="fas fa-file-invoice-dollar text-emerald-600 group-hover:scale-110 transition-transform"></i>
+                <span class="font-black text-slate-800 text-sm">Consolidado Donaciones</span>
+            </a>
+        </div>
+
+        <!-- Área de Contenido del Reporte -->
+        <div class="lg:col-span-3 bg-white rounded-[2.5rem] shadow-xl border border-slate-100 p-8" id="report-content">
+            <p class="text-slate-400 italic text-center py-10">Selecciona un tipo de reporte del menú lateral.</p>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        const reportLinks = document.querySelectorAll('.report-link');
+        const reportContentArea = document.getElementById('report-content');
+        const baseUrl = /*[[@{/config/reportes/}]]*/ '/config/reportes/';
+
+        reportLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const reportType = this.getAttribute('data-report-type');
+                const finalUrl = baseUrl + reportType + '-html';
+
+                fetch(finalUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Error: ' + response.status);
+                        return response.text();
+                    })
+                    .then(html => {
+                        reportContentArea.innerHTML = html;
+                    })
+                    .catch(error => {
+                        reportContentArea.innerHTML = '<p class="text-rose-600 text-center py-10">Error al cargar.</p>';
+                    });
+            });
+        });
+    });
+
+    // FUNCIONES GLOBALES PARA FILTROS Y DESCARGA
+    function refreshConsolidado() {
+        const ini = document.getElementById('date-inicio').value;
+        const fin = document.getElementById('date-fin').value;
+        const url = /*[[@{/config/reportes/donaciones-consolidado-html}]]*/ '/config/reportes/donaciones-consolidado-html';
+
+        fetch(url + `?inicio=${ini}&fin=${fin}`)
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('report-content').innerHTML = html;
+            });
+    }
+
+    function downloadConsolidadoPdf() {
+        const ini = document.getElementById('date-inicio').value;
+        const fin = document.getElementById('date-fin').value;
+        const url = /*[[@{/config/reportes/donaciones-consolidado-pdf}]]*/ '/config/reportes/donaciones-consolidado-pdf';
+        window.location.href = url + `?inicio=${ini}&fin=${fin}`;
+    }
+    /*]]>*/
+</script>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

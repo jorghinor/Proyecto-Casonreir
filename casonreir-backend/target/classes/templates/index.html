@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Dashboard - Casonreir')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+<div th:replace="~{fragments :: menu}"></div>
+
+<style>
+    /* Gradientes para Tarjetas de Stats */
+    .card-grad-1 { background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); }
+    .card-grad-2 { background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%); }
+    .card-grad-3 { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
+    .card-grad-4 { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); }
+
+    .hover-elevate { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .hover-elevate:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.35); }
+
+    .footer-premium { background: linear-gradient(to right, #0f172a, #1e3a8a, #0f172a); }
+
+    .parallax-target { transition: transform 0.1s ease-out; }
+</style>
+
+<!-- HEADER DASHBOARD -->
+<section class="relative h-[60vh] flex items-center justify-center overflow-hidden bg-slate-950">
+    <div class="absolute inset-0 z-0 opacity-40" data-aos="zoom-out" data-aos-duration="2000">
+        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover">
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-transparent to-slate-50"></div>
+    <div class="relative z-10 text-center px-4" data-aos="fade-up">
+        <h1 class="text-7xl font-black text-white mb-2 uppercase italic tracking-tighter">Panel de <span class="text-blue-400">Control</span></h1>
+        <p class="text-blue-200 text-sm font-black tracking-[0.6em] uppercase opacity-80">Gestión Avanzada Casonreir v2.8</p>
+    </div>
+</section>
+
+<!-- STATS CARDS CON GRADIENTES Y PARALLAX -->
+<div class="max-w-[1500px] mx-auto px-6 -mt-24 relative z-20">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Becados -->
+        <div class="card-grad-1 p-8 rounded-[3rem] shadow-2xl hover-elevate group text-white border border-white/10"
+             data-aos="fade-up" data-parallax-speed="-0.05">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-white/70 font-black uppercase text-[10px] tracking-widest mb-1">Becados Totales</h3>
+                    <p class="text-4xl font-black" th:text="${totalBecados}"></p>
+                </div>
+                <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
+                    <i class="fas fa-user-graduate text-2xl"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Padrinos -->
+        <div class="card-grad-2 p-8 rounded-[3rem] shadow-2xl hover-elevate group text-white border border-white/10"
+             data-aos="fade-up" data-aos-delay="100" data-parallax-speed="-0.08">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-white/70 font-black uppercase text-[10px] tracking-widest mb-1">Padrinos Activos</h3>
+                    <p class="text-4xl font-black" th:text="${totalPadrinos}"></p>
+                </div>
+                <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
+                    <i class="fas fa-heart text-2xl"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Donaciones -->
+        <div class="card-grad-3 p-8 rounded-[3rem] shadow-2xl hover-elevate group text-white border border-white/10"
+             data-aos="fade-up" data-aos-delay="200" data-parallax-speed="-0.06">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-white/70 font-black uppercase text-[10px] tracking-widest mb-1">Total Recaudado</h3>
+                    <p class="text-3xl font-black" th:text="${'Bs. ' + #numbers.formatDecimal(totalRecaudado, 1, 2)}"></p>
+                </div>
+                <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
+                    <i class="fas fa-hand-holding-usd text-2xl"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Actividades -->
+        <div class="card-grad-4 p-8 rounded-[3rem] shadow-2xl hover-elevate group text-white border border-white/10"
+             data-aos="fade-up" data-aos-delay="300" data-parallax-speed="-0.09">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-white/70 font-black uppercase text-[10px] tracking-widest mb-1">Actividades</h3>
+                    <p class="text-4xl font-black" th:text="${totalActividades}"></p>
+                </div>
+                <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
+                    <i class="fas fa-calendar-check text-2xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- GRÁFICAS ANALÍTICAS -->
+<div class="max-w-[1500px] mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-10">
+    <div class="bg-white p-10 rounded-[3rem] shadow-2xl border border-slate-100 hover-elevate" data-aos="fade-right">
+        <h3 class="text-xl font-black text-slate-800 uppercase italic mb-8 flex items-center">
+            <i class="fas fa-chart-pie mr-3 text-blue-600"></i> Distribución de Becados
+        </h3>
+        <div style="height: 350px;"><canvas id="chartBecados"></canvas></div>
+    </div>
+    <div class="bg-white p-10 rounded-[3rem] shadow-2xl border border-slate-100 hover-elevate" data-aos="fade-left">
+        <h3 class="text-xl font-black text-slate-800 uppercase italic mb-8 flex items-center">
+            <i class="fas fa-chart-bar mr-3 text-indigo-600"></i> Rendimiento General
+        </h3>
+        <div style="height: 350px;"><canvas id="chartRendimiento"></canvas></div>
+    </div>
+</div>
+
+<!-- CONTENIDO: BECADOS RECIENTES Y PADRINOS -->
+<main class="max-w-[1500px] mx-auto px-6 pb-32">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+        <!-- Becados Recientes -->
+        <div class="lg:col-span-2">
+            <div class="flex justify-between items-center mb-10 reveal">
+                <h2 class="text-3xl font-black text-slate-800 uppercase italic">Ingresos <span class="text-blue-600">Recientes</span></h2>
+                <a href="/becados" class="text-[10px] font-black uppercase text-blue-600 tracking-widest hover:underline">Ver Directorio Completo</a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div th:each="becado, iter : ${becados}"
+                     class="bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 hover-elevate flex items-center space-x-6 group"
+                     data-aos="fade-up" th:data-aos-delay="${iter.index * 100}">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg group-hover:rotate-12 transition-transform"
+                         th:text="${#strings.substring(becado.informacionPersonal.nombre,0,1)}"></div>
+                    <div>
+                        <p class="font-black text-slate-800 text-lg leading-none mb-2" th:text="${becado.informacionPersonal.nombre + ' ' + becado.informacionPersonal.apellidoPat}"></p>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Activo en Sistema</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Padrinos Destacados -->
+        <div class="space-y-10">
+            <div class="bg-slate-900 rounded-[3rem] p-10 text-white shadow-2xl border border-white/5 relative overflow-hidden group" data-aos="fade-left">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl group-hover:bg-blue-600/20 transition-all"></div>
+                <h2 class="text-2xl font-black mb-8 uppercase italic border-b border-white/10 pb-4">Red de Padrinos</h2>
+                <div class="space-y-6">
+                    <div th:each="p : ${padrinos}" class="flex items-center space-x-4 group/item cursor-pointer">
+                        <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-rose-400 shadow-inner group-hover/item:bg-rose-500 group-hover/item:text-white transition-all">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div>
+                            <p class="font-black text-sm uppercase tracking-tight" th:text="${p.informacionPersonal.nombre + ' ' + p.informacionPersonal.apellidoPat}"></p>
+                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Socio Colaborador</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- FOOTER GRADIENTE PREMIUM -->
+<footer class="footer-premium py-20 text-center text-white border-t border-white/5 relative">
+    <div class="mb-6 opacity-30 text-4xl"><i class="fas fa-heart"></i></div>
+    <p class="text-[11px] font-black uppercase tracking-[1em] mb-4 opacity-50">Master Administration Panel</p>
+    <p class="text-xs font-bold uppercase tracking-widest">
+        &copy; 2026 <span class="text-blue-400">FUNDACIÓN CASONREIR</span> &bull; SISTEMA DE GESTIÓN AVANZADA &bull; BOLIVIA
+    </p>
+</footer>
+
+<!-- SCRIPTS CORE -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // Inicializar AOS
+    AOS.init({ once: true, duration: 1000, easing: 'ease-out-quint' });
+
+    // Chart Data desde el Controlador
+    const bActivos = /*[[${becadosActivos}]]*/ 0;
+    const bInactivos = /*[[${becadosInactivos}]]*/ 0;
+    const labelsRend = /*[[${labelsRend}]]*/ [];
+    const valuesRend = /*[[${valoresRend}]]*/ [];
+
+    // Gráfica Circular (Doughnut)
+    new Chart(document.getElementById('chartBecados').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Activos', 'Inactivos'],
+            datasets: [{
+                data: [bActivos, bInactivos],
+                backgroundColor: ['#3b82f6', '#f43f5e'],
+                hoverOffset: 20,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { font: { weight: 'bold' } } } }
+        }
+    });
+
+    // Gráfica de Barras (Rendimiento)
+    new Chart(document.getElementById('chartRendimiento').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: labelsRend,
+            datasets: [{
+                label: 'Alumnos',
+                data: valuesRend,
+                backgroundColor: '#6366f1',
+                borderRadius: 15,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, grid: { display: false }, ticks: { font: { weight: 'bold' } } },
+                x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // Lógica de Parallax en Scroll
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        document.querySelectorAll('[data-parallax-speed]').forEach(el => {
+            const speed = parseFloat(el.getAttribute('data-parallax-speed'));
+            el.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
+

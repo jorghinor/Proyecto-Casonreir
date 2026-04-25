@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Admin - Casonreir</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(226, 232, 240, 0.8); }
+        .nav-item { font-weight: 800; font-size: 0.65rem; letter-spacing: 0.15em; color: #64748b; transition: all 0.3s; }
+        .nav-item:hover { color: #2563eb; }
+        .active-nav { color: #2563eb; }
+        /* Estilos para el autocompletado */
+        #search-results { max-height: 400px; overflow-y: auto; scrollbar-width: thin; }
+    </style>
+</head>
+<body>
+
+<nav th:fragment="menu" class="glass-nav fixed w-full z-[100] h-20 flex items-center">
+    <div class="max-w-[1600px] mx-auto w-full px-6 flex justify-between items-center">
+        <a href="/" class="flex items-center space-x-3 group">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg transform transition-transform group-hover:rotate-12">
+                <i class="fas fa-rocket text-white text-lg"></i>
+            </div>
+            <span class="text-xl font-black text-slate-800 tracking-tighter uppercase italic">CASONREIR</span>
+        </a>
+
+        <div class="hidden lg:flex items-center space-x-8 uppercase">
+            <a href="/" class="nav-item">Dashboard</a>
+            <a href="/becados" class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'ENCARGADO', 'AUXILIAR', 'MEDICO')">Becados</a>
+            <a href="/padrinos" class="nav-item">Padrinos</a>
+            <a href="/donaciones" class="nav-item">Donaciones</a>
+            <a href="/actividades" class="nav-item">Actividades</a>
+            <a href="/familias" class="nav-item">Familias</a>
+
+            <div class="w-px h-6 bg-slate-200"></div>
+
+            <!-- BUSCADOR RÁPIDO DE CONTACTO -->
+            <div class="relative hidden md:block">
+                <div class="flex items-center bg-slate-100 rounded-full px-4 py-2 w-48 focus-within:w-64 focus-within:bg-white border-2 border-transparent focus-within:border-blue-400 transition-all">
+                    <i class="fas fa-search text-slate-400 mr-2 text-xs"></i>
+                    <input type="text" id="quick-search" placeholder="Contacto rápido..."
+                           class="bg-transparent border-0 outline-none text-[10px] font-bold text-slate-700 w-full uppercase tracking-wider">
+                </div>
+                <!-- Resultados -->
+                <div id="search-results" class="absolute top-full right-0 mt-3 w-80 bg-white shadow-2xl rounded-3xl border border-slate-100 hidden z-[200] overflow-hidden"></div>
+            </div>
+
+            <!-- ENLACE AL CENTRO DE CONTROL -->
+            <a sec:authorize="isAuthenticated()"
+               href="/config/hub"
+               class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all shadow-inner"
+               title="Centro de Control">
+                <i class="fas fa-cog"></i>
+            </a>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="bg-slate-900 text-white px-5 py-2 rounded-xl text-[10px] font-black hover:bg-rose-600 transition-all shadow-lg uppercase">Salir</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script del Buscador -->
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('quick-search');
+            const resultsDiv = document.getElementById('search-results');
+
+            if (!input) return;
+
+            input.addEventListener('input', function() {
+                const term = this.value.trim();
+                if (term.length < 3) {
+                    resultsDiv.classList.add('hidden');
+                    return;
+                }
+
+                fetch('/api/becados/buscar-contacto?term=' + term)
+                    .then(res => res.json())
+                    .then(data => {
+                        resultsDiv.innerHTML = '';
+                        if (data.length > 0) {
+                            data.forEach(item => {
+                                resultsDiv.innerHTML += `
+                                        <div class="p-4 border-b border-slate-50 hover:bg-blue-50 transition-colors">
+                                            <p class="font-black text-slate-800 text-sm mb-1 uppercase">${item.nombre}</p>
+                                            <div class="space-y-1">
+                                                <p class="text-[10px] text-blue-600 font-bold"><i class="fas fa-phone-alt mr-2"></i> ${item.telefono}</p>
+                                                <p class="text-[10px] text-indigo-600 font-bold lowercase"><i class="fas fa-envelope mr-2"></i> ${item.email}</p>
+                                                <p class="text-[10px] text-slate-400 font-bold uppercase italic"><i class="fas fa-user-friends mr-2"></i> Tutor: ${item.tutor}</p>
+                                            </div>
+                                        </div>
+                                    `;
+                            });
+                            resultsDiv.classList.remove('hidden');
+                        } else {
+                            resultsDiv.innerHTML = '<p class="p-4 text-[10px] text-slate-400 font-bold uppercase text-center italic">Sin coincidencias</p>';
+                            resultsDiv.classList.remove('hidden');
+                        }
+                    });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!input.contains(e.target) && !resultsDiv.contains(e.target)) {
+                    resultsDiv.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</nav>
+
+<footer th:fragment="footer" class="bg-white border-t border-slate-100 py-10 text-center text-slate-400 text-[10px] font-bold tracking-[0.2em] uppercase">
+    &copy; 2026 FUNDACIÓN CASONREIR &bull; SISTEMA DE GESTIÓN AVANZADA
+</footer>
+
+</body>
+</html>

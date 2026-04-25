@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Configuración - Tipos de Actividad')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+    <div th:replace="~{fragments :: menu}"></div>
+    <main class="max-w-[1400px] mx-auto px-6 pt-32 pb-20">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+            <div>
+                <h1 class="text-4xl font-black text-slate-800 tracking-tighter uppercase italic">Tipos de <span class="text-blue-600">Actividad</span></h1>
+                <p class="text-slate-400 font-bold text-xs uppercase tracking-widest mt-1">Catálogo de actividades</p>
+            </div>
+            <a href="/config/tipos-actividad/nuevo" class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-black shadow-xl hover:bg-blue-700 transition-all uppercase text-xs tracking-widest">Nuevo Tipo</a>
+        </div>
+
+        <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-8">
+            <form th:action="@{/config/tipos-actividad}" method="get" class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="relative flex-1 w-full">
+                    <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                    <input type="text" name="buscar" th:value="${buscar}" placeholder="Buscar por nombre..."
+                           class="w-full pl-14 pr-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-blue-100 outline-none text-slate-700 font-bold">
+                </div>
+                <select name="estado" class="w-full md:w-auto bg-slate-50 border-0 rounded-2xl px-6 py-4 font-bold text-slate-600 focus:ring-4 focus:ring-blue-100">
+                    <option value="" th:selected="${estado == null || estado == ''}">Todos</option>
+                    <option value="ACTIVO" th:selected="${estado == 'ACTIVO'}">Activos</option>
+                    <option value="INACTIVO" th:selected="${estado == 'INACTIVO'}">Inactivos</option>
+                </select>
+                <button type="submit" class="w-full md:w-auto bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Filtrar</button>
+            </form>
+        </div>
+
+        <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 border-b">
+                    <tr class="text-[10px] font-black uppercase text-slate-400">
+                        <th class="px-8 py-6">ID</th>
+                        <th class="px-8 py-6">Nombre</th>
+                        <th class="px-8 py-6">Estado</th>
+                        <th class="px-8 py-6 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <tr th:each="item : ${items}" class="hover:bg-blue-50/20 transition-all group">
+                        <td class="px-8 py-6 font-bold text-slate-400 text-xs" th:text="${'#' + item.id}"></td>
+                        <td class="px-8 py-6 font-black text-slate-700 uppercase tracking-tighter" th:text="${item.nombre}"></td>
+                        <td class="px-8 py-6">
+                            <span th:text="${item.estado}"
+                                  th:class="${item.estado == 'ACTIVO' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'} + ' px-3 py-1 rounded-lg text-[10px] font-black uppercase border border-current'"></span>
+                        </td>
+                        <td class="px-8 py-6 text-right space-x-2">
+                            <a th:href="@{'/config/tipos-actividad/editar/' + ${item.id}}" class="inline-flex w-10 h-10 bg-slate-100 text-slate-600 rounded-xl items-center justify-center hover:bg-blue-600 hover:text-white transition-all shadow-sm">
+                                <i class="fas fa-pen text-xs"></i>
+                            </a>
+                            <a th:href="@{'/config/tipos-actividad/eliminar/' + ${item.id}}"
+                               onclick="return confirm('¿Eliminar tipo de actividad?')"
+                               class="inline-flex w-10 h-10 bg-slate-100 text-slate-400 rounded-xl items-center justify-center hover:bg-rose-600 hover:text-white transition-all shadow-sm">
+                                <i class="fas fa-trash-alt text-xs"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="bg-slate-50/50 px-8 py-6 flex justify-between items-center border-t border-slate-100">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    Página <span class="text-slate-800 font-black" th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">1</span>
+                </p>
+                <div class="flex space-x-2">
+                    <a th:if="${currentPage > 0}" th:href="@{/config/tipos-actividad(page=${currentPage - 1}, buscar=${buscar}, estado=${estado})}"
+                       class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-slate-600 hover:bg-blue-600 hover:text-white transition-all">ANTERIOR</a>
+                    <a th:if="${currentPage + 1 < totalPages}" th:href="@{/config/tipos-actividad(page=${currentPage + 1}, buscar=${buscar}, estado=${estado})}"
+                       class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-slate-600 hover:bg-blue-600 hover:text-white transition-all">SIGUIENTE</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

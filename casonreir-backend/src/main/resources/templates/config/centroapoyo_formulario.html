@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Formulario C.E.A.')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-5xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-indigo-700 text-white text-center shadow-xl">
+        <h1 class="text-5xl font-black mb-2 uppercase italic">Configuración de Sede</h1>
+    </div>
+    <form th:action="@{/config/centroapoyo/guardar}" th:object="${centro}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div class="space-y-2 md:col-span-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Nombre del Centro</label>
+                <input type="text" th:field="*{nombre}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Dirección</label>
+                <input type="text" th:field="*{direccion}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Teléfono</label>
+                <input type="number" th:field="*{telefono}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+            </div>
+        </div>
+
+        <!-- Editores de Texto Enriquecido -->
+        <div class="grid grid-cols-1 gap-8">
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Misión</label>
+                <textarea th:field="*{mision}" class="editor"></textarea>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Visión</label>
+                <textarea th:field="*{vision}" class="editor"></textarea>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Objetivo</label>
+                <textarea th:field="*{objetivo}" class="editor"></textarea>
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Historia</label>
+                <textarea th:field="*{historia}" class="editor"></textarea>
+            </div>
+        </div>
+
+        <div class="mt-12 pt-10 border-t flex justify-between">
+            <a href="/config/centroapoyo" class="text-xs font-black text-slate-400 uppercase">Cancelar</a>
+            <button type="submit" class="bg-indigo-600 text-white px-12 py-5 rounded-3xl font-black shadow-xl uppercase">Guardar Cambios</button>
+        </div>
+    </form>
+</main>
+
+<!-- Script de CKEditor -->
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script>
+    document.querySelectorAll('.editor').forEach(el => {
+        ClassicEditor.create(el).catch(error => { console.error(error); });
+    });
+</script>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

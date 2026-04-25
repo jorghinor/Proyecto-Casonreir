@@ -1,0 +1,31 @@
+<div th:fragment="report">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-black text-slate-800 uppercase italic">Historial Académico General</h2>
+        <a th:href="@{/config/reportes/historial-academico-pdf}"
+           class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-black text-xs uppercase shadow-lg flex items-center">
+            <i class="fas fa-file-pdf mr-2"></i> Descargar PDF
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+            <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b">
+                <th class="py-4 px-2">Becado</th>
+                <th class="py-4 px-2">Fecha</th>
+                <th class="py-4 px-2">Tipo</th>
+                <th class="py-4 px-2">Rendimiento</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+            <tr th:each="h : ${historiales}" class="text-sm hover:bg-slate-50">
+                <td class="py-4 px-2 font-bold text-slate-700"
+                    th:text="${h.becado?.informacionPersonal?.nombre + ' ' + h.becado?.informacionPersonal?.apellidoPat}"></td>
+                <td class="py-4 px-2 text-slate-500" th:text="${h.fecha}"></td>
+                <td class="py-4 px-2 text-slate-600" th:text="${h.tipo}"></td>
+                <td class="py-4 px-2 font-black text-indigo-600" th:text="${h.rendimiento}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

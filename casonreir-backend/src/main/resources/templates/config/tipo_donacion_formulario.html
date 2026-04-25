@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Configuración - Tipo de Donación')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+        <div class="pt-23 pb-12 bg-gradient-to-br from-emerald-600 to-teal-700 text-white text-center shadow-xl">
+            <div class="max-w-4xl mx-auto px-4">
+                <h1 class="text-5xl font-black mb-2 tracking-tighter uppercase italic">Tipo de <span class="text-emerald-200">Donación</span></h1>
+                <p class="text-xl opacity-80 font-light">Registra o actualiza parámetros del catálogo.</p>
+            </div>
+        </div>
+        <form th:action="@{/config/tipos-donacion/guardar}" th:object="${tipoDonacion}" method="post"
+              class="bg-white rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.1)] p-12 border border-slate-100">
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="space-y-8">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombre</label>
+                    <input type="text" th:field="*{nombre}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-emerald-100 outline-none text-slate-700 font-bold" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Estado</label>
+                    <select th:field="*{estado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl focus:ring-4 focus:ring-emerald-100 outline-none text-slate-700 font-bold cursor-pointer">
+                        <option value="ACTIVO">ACTIVO</option>
+                        <option value="INACTIVO">INACTIVO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-10 border-t border-slate-100 flex justify-between items-center">
+                <a href="/config/tipos-donacion" class="text-xs font-black text-slate-400 hover:text-slate-600 transition tracking-widest uppercase">Cancelar</a>
+                <button type="submit" class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 active:scale-95 transition-all">
+                    GUARDAR TIPO <i class="fas fa-save ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

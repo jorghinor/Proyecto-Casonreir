@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Administración - Instituciones')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-[1500px] mx-auto px-6 pt-32 pb-20">
+        <!-- HEADER -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10">
+            <div>
+                <h1 class="text-4xl font-black text-slate-800 tracking-tighter uppercase italic text-blue-600">Instituciones</h1>
+                <p class="text-slate-400 font-bold tracking-widest text-xs mt-1 uppercase">Aliados estratégicos</p>
+            </div>
+            <a th:href="@{/config/instituciones/nuevo}" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black shadow-xl hover:scale-105 transition-all text-xs uppercase">
+                <i class="fas fa-university mr-2"></i> NUEVA INSTITUCIÓN
+            </a>
+        </div>
+
+        <!-- BUSCADOR -->
+        <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-8 flex gap-4">
+            <form th:action="@{/config/instituciones}" method="get" class="flex-1 flex gap-4">
+                <input type="text" name="buscar" th:value="${buscar}" placeholder="Buscar institución..." class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold">
+                <button type="submit" class="bg-slate-900 text-white px-8 rounded-2xl font-black text-xs uppercase hover:bg-blue-600 transition-all">Filtrar</button>
+            </form>
+        </div>
+
+        <!-- TABLA -->
+        <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 border-b">
+                    <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        <th class="px-8 py-6">Nombre</th>
+                        <th class="px-8 py-6">Ubicación</th>
+                        <th class="px-8 py-6 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <tr th:each="i : ${instituciones}" class="hover:bg-blue-50/20 transition-all group">
+                        <td class="px-8 py-6 font-black text-slate-800 text-lg" th:text="${i.nombre}">-</td>
+                        <td class="px-8 py-6 font-bold text-slate-500" th:text="${i.direccion}">-</td>
+                        <td class="px-8 py-6 text-right space-x-2">
+                            <a th:href="@{'/config/instituciones/editar/' + ${i.id}}" class="text-blue-600 font-bold mr-4">Editar</a>
+                            <a th:href="@{'/config/instituciones/eliminar/' + ${i.id}}" onclick="return confirm('¿Eliminar?')" class="text-rose-600 font-bold">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- PAGINACIÓN -->
+            <div class="bg-slate-50 px-8 py-6 flex justify-between items-center">
+                <p class="text-[10px] font-black text-slate-400 uppercase">Página <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">1</span></p>
+                <div class="flex space-x-2">
+                    <a th:if="${currentPage > 0}" th:href="@{/config/instituciones(page=${currentPage - 1})}" class="px-5 py-2 bg-white border rounded-xl text-[10px] font-black uppercase">Anterior</a>
+                    <a th:if="${currentPage + 1 < totalPages}" th:href="@{/config/instituciones(page=${currentPage + 1})}" class="px-5 py-2 bg-white border rounded-xl text-[10px] font-black uppercase">Siguiente</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

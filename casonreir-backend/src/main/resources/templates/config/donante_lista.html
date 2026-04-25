@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Administración - Donantes')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-[1600px] mx-auto px-6 pt-32 pb-20">
+        <!-- HEADER -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10">
+            <div>
+                <h1 class="text-4xl font-black text-slate-800 tracking-tighter uppercase italic text-emerald-600">Donantes Externos</h1>
+                <p class="text-slate-400 font-bold tracking-widest text-xs mt-1 uppercase">Benefactores</p>
+            </div>
+            <!-- BOTÓN FORZADO -->
+            <a th:href="@{/config/donantes/nuevo}" class="bg-emerald-600 text-white px-8 py-4 rounded-2xl font-black shadow-xl hover:scale-105 transition-all text-xs uppercase flex items-center">
+                <i class="fas fa-plus-circle mr-3"></i> NUEVO DONANTE
+            </a>
+        </div>
+
+        <!-- TABLA -->
+        <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 border-b">
+                    <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        <th class="px-8 py-6">Nombre del Donante</th>
+                        <th class="px-8 py-6">Especialidad</th>
+                        <th class="px-8 py-6 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <tr th:each="d : ${donantes}" class="hover:bg-emerald-50/10 transition-all group">
+                        <td class="px-8 py-6 font-black text-slate-800 text-lg">
+                            <span th:if="${d.informacionPersonal != null}" th:text="${d.informacionPersonal.nombre + ' ' + d.informacionPersonal.apellidoPat}">-</span>
+                            <span th:unless="${d.informacionPersonal != null}" class="text-slate-400 italic">Sin Info Personal</span>
+                        </td>
+                        <td class="px-8 py-6 font-bold text-slate-500" th:text="${d.tipoDonacion}">-</td>
+                        <td class="px-8 py-6 text-right space-x-2">
+                            <a th:href="@{'/config/donantes/editar/' + ${d.id}}" class="text-emerald-600 font-bold mr-4">Editar</a>
+                            <a th:href="@{'/config/donantes/eliminar/' + ${d.id}}" onclick="return confirm('¿Eliminar?')" class="text-rose-600 font-bold">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- PAGINACIÓN -->
+            <div class="bg-slate-50 px-8 py-6 flex justify-between items-center border-t">
+                <p class="text-[10px] font-black text-slate-400 uppercase">Página <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">1</span></p>
+                <div class="flex space-x-2">
+                    <a th:if="${currentPage > 0}" th:href="@{/config/donantes(page=${currentPage - 1})}" class="px-5 py-2 bg-white border rounded-xl text-[10px] font-black">Anterior</a>
+                    <a th:if="${currentPage + 1 < totalPages}" th:href="@{/config/donantes(page=${currentPage + 1})}" class="px-5 py-2 bg-white border rounded-xl text-[10px] font-black">Siguiente</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

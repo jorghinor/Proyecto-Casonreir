@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Asignación de Encargados')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+<main class="max-w-[1200px] mx-auto px-6 pt-32 pb-20">
+    <div class="flex justify-between items-center mb-10">
+        <h1 class="text-4xl font-black text-slate-800 uppercase italic">Encargados por <span class="text-blue-600">Sede</span></h1>
+        <a th:href="@{/config/encargados-centros/nuevo}" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black shadow-xl uppercase text-xs">Vincular Encargado</a>
+    </div>
+    <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border">
+        <table class="w-full text-left">
+            <thead class="bg-slate-50 border-b">
+            <tr class="text-[10px] font-black text-slate-400 uppercase">
+                <th class="px-8 py-6">Encargado</th>
+                <th class="px-8 py-6">Sede C.E.A.</th>
+                <th class="px-8 py-6">Inicio</th>
+                <th class="px-8 py-6">Estado</th>
+                <th class="px-8 py-6 text-right">Acciones</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y">
+            <tr th:each="item : ${lista}">
+                <td class="px-8 py-6 font-black" th:text="${item.encargado.informacionPersonal.nombre + ' ' + item.encargado.informacionPersonal.apellidoPat}"></td>
+                <td class="px-8 py-6 text-slate-500" th:text="${item.centroApoyo.nombre}"></td>
+                <td class="px-8 py-6 text-sm" th:text="${item.fechaInicio}"></td>
+                <td class="px-8 py-6">
+                    <span th:text="${item.estado}" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-xl text-[10px] font-black uppercase"></span>
+                </td>
+                <td class="px-8 py-6 text-right">
+                    <a th:href="@{'/config/encargados-centros/eliminar/' + ${item.encargado.id} + '/' + ${item.centroApoyo.id}}" class="text-rose-600 font-bold text-xs" onclick="return confirm('¿Quitar?')">QUITAR</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

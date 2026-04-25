@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Gestión - Asignación')}"></head>
+<body class="bg-slate-50 font-sans leading-normal tracking-normal overflow-x-hidden">
+
+    <div th:replace="~{fragments :: menu}"></div>
+
+    <main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+        <div class="pt-23 pb-12 bg-gradient-to-br from-blue-700 to-indigo-900 text-white text-center shadow-xl">
+            <h1 class="text-5xl font-black mb-2 tracking-tighter uppercase italic text-white">Vincular <span class="text-blue-200">Apoyo</span></h1>
+            <p class="opacity-80 text-sm tracking-widest uppercase">Asignación de padrinos a becados</p>
+        </div>
+        <form th:action="@{/config/padrino-becado/guardar}" th:object="${asignacion}" method="post"
+              class="bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100">
+
+            <div class="grid grid-cols-1 gap-10">
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Seleccionar Becado (Ahijado)</label>
+                    <select th:field="*{becado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700 focus:ring-4 focus:ring-blue-100" required>
+                        <option value="">-- Seleccionar Niño --</option>
+                        <option th:each="b : ${becados}" th:value="${b.id}" th:text="${b.informacionPersonal.nombre + ' ' + b.informacionPersonal.apellidoPat}"></option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Seleccionar Padrino Responsable</label>
+                    <select th:field="*{padrino}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700 focus:ring-4 focus:ring-blue-100" required>
+                        <option value="">-- Seleccionar Padrino --</option>
+                        <option th:each="p : ${padrinos}" th:value="${p.id}" th:text="${p.informacionPersonal.nombre + ' ' + p.informacionPersonal.apellidoPat}"></option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fecha de Inicio de Apoyo</label>
+                        <input type="date" th:field="*{fechaInicio}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Estado del Vínculo</label>
+                        <select th:field="*{estado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-bold text-slate-700">
+                            <option value="ACTIVO">ACTIVO</option>
+                            <option value="INACTIVO">FINALIZADO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Notas / Observaciones</label>
+                    <textarea th:field="*{notas}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl outline-none font-medium text-slate-700" rows="3"></textarea>
+                </div>
+
+            </div>
+
+            <div class="mt-12 pt-10 border-t border-slate-100 flex justify-between items-center">
+                <a href="/config/padrino-becado" class="text-xs font-black text-slate-400 uppercase tracking-widest">Cancelar</a>
+                <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-12 py-5 rounded-3xl font-black shadow-2xl hover:scale-105 transition-all">
+                    GUARDAR VÍNCULO <i class="fas fa-link ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+    <script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

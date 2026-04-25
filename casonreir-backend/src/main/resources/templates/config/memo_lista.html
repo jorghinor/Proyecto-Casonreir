@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Notas Internas')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+<main class="max-w-[1200px] mx-auto px-6 pt-32 pb-20">
+    <div class="flex justify-between items-center mb-10">
+        <h1 class="text-3xl font-black text-slate-800 uppercase italic">Notas de <span class="text-teal-600">Seguimiento</span></h1>
+        <a th:href="@{/config/memos/nuevo}" class="bg-teal-600 text-white px-6 py-3 rounded-xl font-black text-xs uppercase shadow-lg">+ Crear Nota</a>
+    </div>
+
+    <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border">
+        <table class="w-full text-left">
+            <thead class="bg-slate-50 border-b">
+            <tr class="text-[10px] font-black text-slate-400 uppercase">
+                <th class="px-8 py-6">Persona</th>
+                <th class="px-8 py-6">Título / Asunto</th>
+                <th class="px-8 py-6">Nivel</th>
+                <th class="px-8 py-6 text-right">Acciones</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y">
+            <tr th:each="item : ${lista}">
+                <td class="px-8 py-6">
+                    <p class="font-black text-slate-800" th:text="${item.persona.nombre + ' ' + item.persona.apellidoPat}"></p>
+                </td>
+                <td class="px-8 py-6">
+                    <p class="font-bold text-slate-600 text-sm" th:text="${item.titulo}"></p>
+                    <p class="text-xs text-slate-400" th:text="${#strings.abbreviate(item.contenido, 50)}"></p>
+                </td>
+                <td class="px-8 py-6">
+                            <span th:text="${item.nivel == 1 ? 'BAJO' : (item.nivel == 2 ? 'MEDIO' : 'URGENTE')}"
+                                  th:class="${item.nivel == 3 ? 'text-rose-600 bg-rose-50' : 'text-slate-500 bg-slate-50'} + ' px-3 py-1 rounded-lg font-black text-[10px]'"></span>
+                </td>
+                <td class="px-8 py-6 text-right space-x-2">
+                    <a th:href="@{'/config/memos/editar/' + ${item.id}}" class="text-blue-600 font-bold text-xs">EDITAR</a>
+                    <a th:href="@{'/config/memos/eliminar/' + ${item.id}}" class="text-rose-600 font-bold text-xs" onclick="return confirm('¿Borrar esta nota?')">BORRAR</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>

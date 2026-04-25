@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Asignar Actividad')}"></head>
+<body class="bg-slate-50 font-sans">
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="max-w-4xl mx-auto px-4 py-16 -mt-10">
+    <div class="pt-23 pb-12 bg-gradient-to-br from-blue-700 to-indigo-900 text-white text-center">
+        <h1 class="text-5xl font-black mb-2 uppercase italic">Vincular Actividad</h1>
+    </div>
+    <form th:action="@{/config/actividades-becados/guardar}" th:object="${actividadBecado}" method="post" class="bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Seleccionar Becado -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Seleccionar Becado</label>
+                <select th:field="*{becado}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+                    <option th:each="b : ${becados}" th:value="${b.id}"
+                            th:text="${b.informacionPersonal.nombre + ' ' + b.informacionPersonal.apellidoPat}"></option>
+                </select>
+            </div>
+
+            <!-- Seleccionar Actividad -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Seleccionar Actividad</label>
+                <select th:field="*{actividad}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" required>
+                    <option th:each="a : ${actividades}" th:value="${a.id}" th:text="${a.nombre}"></option>
+                </select>
+            </div>
+
+            <!-- Fecha y Tipo -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Fecha</label>
+                <input type="date" th:field="*{fecha}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+            </div>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Tipo / Categoría</label>
+                <input type="text" th:field="*{tipo}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold" placeholder="Ej: Taller, Deporte">
+            </div>
+
+            <!-- Campos Fantasmas -->
+            <div class="space-y-2 md:col-span-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Información Adicional (Campo 1)</label>
+                <textarea th:field="*{name1}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-medium" rows="2" placeholder="Notas o descripciones..."></textarea>
+            </div>
+            <div class="space-y-2 md:col-span-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase">Información Adicional (Campo 2)</label>
+                <input type="text" th:field="*{name2}" class="w-full px-6 py-4 bg-slate-50 border-0 rounded-2xl font-bold">
+            </div>
+        </div>
+
+        <div class="mt-12 pt-10 border-t flex justify-between">
+            <a href="/config/actividades-becados" class="text-xs font-black text-slate-400 uppercase">Volver</a>
+            <button type="submit" class="bg-blue-600 text-white px-12 py-5 rounded-3xl font-black shadow-xl uppercase">Guardar</button>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:replace="~{fragments :: magic-script}"></script>
+</body>
+</html>
